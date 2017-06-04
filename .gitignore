@@ -6,7 +6,6 @@ dist
 result*
 teste*
 *.pyc
-tests
 docs
 *.tar
 *.tar.bz2
