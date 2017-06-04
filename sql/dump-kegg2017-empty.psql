@@ -1,0 +1,2326 @@
+--
+-- PostgreSQL database dump
+--
+
+SET statement_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+
+--
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET search_path = public, pg_catalog;
+
+--
+-- Name: accessions_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE accessions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.accessions_id_seq OWNER TO postgres;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- Name: accessions; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE accessions (
+    id integer DEFAULT nextval('accessions_id_seq'::regclass) NOT NULL,
+    accession character varying(200) DEFAULT NULL::character varying,
+    created_at timestamp with time zone,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE public.accessions OWNER TO postgres;
+
+--
+-- Name: clustering_methods_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE clustering_methods_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.clustering_methods_id_seq OWNER TO postgres;
+
+--
+-- Name: clustering_methods; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE clustering_methods (
+    id integer DEFAULT nextval('clustering_methods_id_seq'::regclass) NOT NULL,
+    cutoff integer,
+    method character varying(255) DEFAULT NULL::character varying(255),
+    data timestamp with time zone,
+    created_at timestamp with time zone,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE public.clustering_methods OWNER TO postgres;
+
+--
+-- Name: clusters_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE clusters_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.clusters_id_seq OWNER TO postgres;
+
+--
+-- Name: clusters; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE clusters (
+    id integer DEFAULT nextval('clusters_id_seq'::regclass) NOT NULL,
+    cluster_identification integer,
+    clustering_method_id integer,
+    protein_id integer,
+    created_at timestamp with time zone,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL,
+    ec_id integer
+);
+
+
+ALTER TABLE public.clusters OWNER TO postgres;
+
+--
+-- Name: domains_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE domains_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.domains_id_seq OWNER TO postgres;
+
+--
+-- Name: domains; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE domains (
+    id integer DEFAULT nextval('domains_id_seq'::regclass) NOT NULL,
+    domain character varying(255) DEFAULT NULL::character varying
+);
+
+
+ALTER TABLE public.domains OWNER TO postgres;
+
+--
+-- Name: ec_intragenomic_analogy_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE ec_intragenomic_analogy_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.ec_intragenomic_analogy_id_seq OWNER TO postgres;
+
+--
+-- Name: ec_intragenomic_analogy; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE ec_intragenomic_analogy (
+    id integer DEFAULT nextval('ec_intragenomic_analogy_id_seq'::regclass) NOT NULL,
+    ec_id integer,
+    intragenomic_analogy integer
+);
+
+
+ALTER TABLE public.ec_intragenomic_analogy OWNER TO postgres;
+
+--
+-- Name: ec_maps_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE ec_maps_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.ec_maps_id_seq OWNER TO postgres;
+
+--
+-- Name: ec_maps; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE ec_maps (
+    id integer DEFAULT nextval('ec_maps_id_seq'::regclass) NOT NULL,
+    ec_id integer,
+    map_id integer,
+    created_at timestamp with time zone,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE public.ec_maps OWNER TO postgres;
+
+--
+-- Name: ec_reaction_classes_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE ec_reaction_classes_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.ec_reaction_classes_id_seq OWNER TO postgres;
+
+--
+-- Name: ec_reaction_classes; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE ec_reaction_classes (
+    id integer DEFAULT nextval('ec_reaction_classes_id_seq'::regclass) NOT NULL,
+    reaction character varying(200),
+    reaction_prefix integer
+);
+
+
+ALTER TABLE public.ec_reaction_classes OWNER TO postgres;
+
+--
+-- Name: ec_rectangles_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE ec_rectangles_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.ec_rectangles_id_seq OWNER TO postgres;
+
+--
+-- Name: ec_rectangles; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE ec_rectangles (
+    id integer DEFAULT nextval('ec_rectangles_id_seq'::regclass) NOT NULL,
+    ec_id integer NOT NULL,
+    rectangle_id integer NOT NULL
+);
+
+
+ALTER TABLE public.ec_rectangles OWNER TO postgres;
+
+--
+-- Name: ecs_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE ecs_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.ecs_id_seq OWNER TO postgres;
+
+--
+-- Name: ecs; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE ecs (
+    id integer DEFAULT nextval('ecs_id_seq'::regclass) NOT NULL,
+    ec character varying(100) DEFAULT NULL::character varying(100),
+    created_at timestamp with time zone,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL,
+    ec_reaction_class_id integer
+);
+
+
+ALTER TABLE public.ecs OWNER TO postgres;
+
+--
+-- Name: genome_comparison_clusters_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE genome_comparison_clusters_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.genome_comparison_clusters_id_seq OWNER TO postgres;
+
+--
+-- Name: genome_comparison_clusters; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE genome_comparison_clusters (
+    id integer DEFAULT nextval('genome_comparison_clusters_id_seq'::regclass),
+    cluster_identification integer,
+    protein_ids text,
+    genome_comparison_id integer
+);
+
+
+ALTER TABLE public.genome_comparison_clusters OWNER TO postgres;
+
+--
+-- Name: genome_comparisons_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE genome_comparisons_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.genome_comparisons_id_seq OWNER TO postgres;
+
+--
+-- Name: genome_comparisons; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE genome_comparisons (
+    id integer DEFAULT nextval('genome_comparisons_id_seq'::regclass) NOT NULL,
+    domain_id integer,
+    kingdom_id integer,
+    taxonomic_group_level3_id integer,
+    taxonomic_group_level4_id integer,
+    organism_id integer,
+    ec_id integer
+);
+
+
+ALTER TABLE public.genome_comparisons OWNER TO postgres;
+
+--
+-- Name: kingdoms_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE kingdoms_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.kingdoms_id_seq OWNER TO postgres;
+
+--
+-- Name: kingdoms; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE kingdoms (
+    id integer DEFAULT nextval('kingdoms_id_seq'::regclass) NOT NULL,
+    kingdom character varying(255) DEFAULT NULL::character varying,
+    domain_id integer
+);
+
+
+ALTER TABLE public.kingdoms OWNER TO postgres;
+
+--
+-- Name: map_arrow_coordinates_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE map_arrow_coordinates_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.map_arrow_coordinates_id_seq OWNER TO postgres;
+
+--
+-- Name: map_arrow_coordinates; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE map_arrow_coordinates (
+    id integer DEFAULT nextval('map_arrow_coordinates_id_seq'::regclass) NOT NULL,
+    arrow_id integer,
+    created_at timestamp with time zone,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL,
+    coordinates character varying(2000) DEFAULT NULL::character varying(2000)
+);
+
+
+ALTER TABLE public.map_arrow_coordinates OWNER TO postgres;
+
+--
+-- Name: map_arrows_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE map_arrows_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.map_arrows_id_seq OWNER TO postgres;
+
+--
+-- Name: map_arrows; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE map_arrows (
+    id integer DEFAULT nextval('map_arrows_id_seq'::regclass) NOT NULL,
+    map_id integer,
+    created_at timestamp with time zone,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE public.map_arrows OWNER TO postgres;
+
+--
+-- Name: map_line_coordinates_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE map_line_coordinates_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.map_line_coordinates_id_seq OWNER TO postgres;
+
+--
+-- Name: map_line_coordinates; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE map_line_coordinates (
+    id integer DEFAULT nextval('map_line_coordinates_id_seq'::regclass) NOT NULL,
+    line_id integer,
+    x1 integer,
+    x2 integer,
+    created_at timestamp with time zone,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE public.map_line_coordinates OWNER TO postgres;
+
+--
+-- Name: map_lines_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE map_lines_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.map_lines_id_seq OWNER TO postgres;
+
+--
+-- Name: map_lines; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE map_lines (
+    id integer DEFAULT nextval('map_lines_id_seq'::regclass) NOT NULL,
+    map_id integer,
+    created_at timestamp with time zone,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE public.map_lines OWNER TO postgres;
+
+--
+-- Name: map_polygon_coordinates_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE map_polygon_coordinates_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.map_polygon_coordinates_id_seq OWNER TO postgres;
+
+--
+-- Name: map_polygon_coordinates; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE map_polygon_coordinates (
+    id integer DEFAULT nextval('map_polygon_coordinates_id_seq'::regclass) NOT NULL,
+    polygon_id integer,
+    created_at timestamp with time zone,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL,
+    coordinates character varying(1000) DEFAULT NULL::character varying(1000)
+);
+
+
+ALTER TABLE public.map_polygon_coordinates OWNER TO postgres;
+
+--
+-- Name: map_polygons_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE map_polygons_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.map_polygons_id_seq OWNER TO postgres;
+
+--
+-- Name: map_polygons; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE map_polygons (
+    id integer DEFAULT nextval('map_polygons_id_seq'::regclass) NOT NULL,
+    map_id integer,
+    created_at timestamp with time zone,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE public.map_polygons OWNER TO postgres;
+
+--
+-- Name: map_rectangle_coordinates_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE map_rectangle_coordinates_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.map_rectangle_coordinates_id_seq OWNER TO postgres;
+
+--
+-- Name: map_rectangle_coordinates; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE map_rectangle_coordinates (
+    id integer DEFAULT nextval('map_rectangle_coordinates_id_seq'::regclass) NOT NULL,
+    rectangle_id integer,
+    x1 integer,
+    x2 integer,
+    y1 integer,
+    y2 integer,
+    created_at timestamp with time zone,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL,
+    ec character varying(100),
+    search text
+);
+
+
+ALTER TABLE public.map_rectangle_coordinates OWNER TO postgres;
+
+--
+-- Name: map_rectangles_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE map_rectangles_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.map_rectangles_id_seq OWNER TO postgres;
+
+--
+-- Name: map_rectangles; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE map_rectangles (
+    id integer DEFAULT nextval('map_rectangles_id_seq'::regclass) NOT NULL,
+    map_id integer,
+    created_at timestamp with time zone,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE public.map_rectangles OWNER TO postgres;
+
+--
+-- Name: metabolic_pathways_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE metabolic_pathways_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.metabolic_pathways_id_seq OWNER TO postgres;
+
+--
+-- Name: metabolic_pathways; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE metabolic_pathways (
+    id integer DEFAULT nextval('metabolic_pathways_id_seq'::regclass) NOT NULL,
+    name character varying(1000) DEFAULT NULL::character varying(1000),
+    subsystem_id integer,
+    created_at timestamp with time zone,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE public.metabolic_pathways OWNER TO postgres;
+
+--
+-- Name: metabolic_pathways_maps_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE metabolic_pathways_maps_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.metabolic_pathways_maps_id_seq OWNER TO postgres;
+
+--
+-- Name: metabolic_pathways_maps; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE metabolic_pathways_maps (
+    id integer DEFAULT nextval('metabolic_pathways_maps_id_seq'::regclass) NOT NULL,
+    identification character varying(100) DEFAULT NULL::character varying(100),
+    metabolic_pathway_id integer,
+    created_at timestamp with time zone,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE public.metabolic_pathways_maps OWNER TO postgres;
+
+--
+-- Name: organism_ecs_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE organism_ecs_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.organism_ecs_id_seq OWNER TO postgres;
+
+--
+-- Name: organism_ecs; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE organism_ecs (
+    id integer DEFAULT nextval('organism_ecs_id_seq'::regclass) NOT NULL,
+    organism_id integer,
+    ec_id integer
+);
+
+
+ALTER TABLE public.organism_ecs OWNER TO postgres;
+
+--
+-- Name: organism_maps_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE organism_maps_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.organism_maps_id_seq OWNER TO postgres;
+
+--
+-- Name: organism_maps; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE organism_maps (
+    id integer DEFAULT nextval('organism_maps_id_seq'::regclass) NOT NULL,
+    organism_id integer,
+    map_id integer,
+    created_at timestamp with time zone,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE public.organism_maps OWNER TO postgres;
+
+--
+-- Name: organism_rectangle_coordinates_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE organism_rectangle_coordinates_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.organism_rectangle_coordinates_id_seq OWNER TO postgres;
+
+--
+-- Name: organism_rectangle_coordinates; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE organism_rectangle_coordinates (
+    id integer DEFAULT nextval('organism_rectangle_coordinates_id_seq'::regclass) NOT NULL,
+    map_id integer,
+    organism_id integer,
+    x1 integer,
+    x2 integer,
+    y1 integer,
+    y2 integer,
+    color character varying(255)
+);
+
+
+ALTER TABLE public.organism_rectangle_coordinates OWNER TO postgres;
+
+--
+-- Name: organism_taxonomies_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE organism_taxonomies_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.organism_taxonomies_id_seq OWNER TO postgres;
+
+--
+-- Name: organism_taxonomies; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE organism_taxonomies (
+    id integer DEFAULT nextval('organism_taxonomies_id_seq'::regclass) NOT NULL,
+    organism_id integer,
+    taxonomy_id integer,
+    created_at timestamp with time zone,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE public.organism_taxonomies OWNER TO postgres;
+
+--
+-- Name: organisms_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE organisms_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.organisms_id_seq OWNER TO postgres;
+
+--
+-- Name: organisms; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE organisms (
+    id integer DEFAULT nextval('organisms_id_seq'::regclass) NOT NULL,
+    code character varying(200) DEFAULT NULL::character varying(200),
+    name character varying(200) DEFAULT NULL::character varying(200),
+    database_id integer,
+    created_at timestamp with time zone,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL,
+    domain_id integer,
+    kingdom_id integer,
+    taxonomic_group3_id integer,
+    taxonomic_group4_id integer
+)
+WITH (autovacuum_vacuum_scale_factor='0.0', autovacuum_vacuum_threshold='5000', autovacuum_analyze_scale_factor='0.0', autovacuum_analyze_threshold='5000');
+
+
+ALTER TABLE public.organisms OWNER TO postgres;
+
+--
+-- Name: pathway_subsystems_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE pathway_subsystems_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.pathway_subsystems_id_seq OWNER TO postgres;
+
+--
+-- Name: pathway_subsystems; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE pathway_subsystems (
+    id integer DEFAULT nextval('pathway_subsystems_id_seq'::regclass) NOT NULL,
+    subsystem character varying(200) DEFAULT NULL::character varying(200),
+    system_id integer,
+    created_at timestamp with time zone,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE public.pathway_subsystems OWNER TO postgres;
+
+--
+-- Name: pathway_systems_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE pathway_systems_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.pathway_systems_id_seq OWNER TO postgres;
+
+--
+-- Name: pathway_systems; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE pathway_systems (
+    id integer DEFAULT nextval('pathway_systems_id_seq'::regclass) NOT NULL,
+    system character varying(200) DEFAULT NULL::character varying(200),
+    created_at timestamp with time zone,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE public.pathway_systems OWNER TO postgres;
+
+--
+-- Name: protein_accessions_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE protein_accessions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.protein_accessions_id_seq OWNER TO postgres;
+
+--
+-- Name: protein_accessions; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE protein_accessions (
+    id integer DEFAULT nextval('protein_accessions_id_seq'::regclass) NOT NULL,
+    protein_id integer,
+    accession_id integer,
+    created_at timestamp with time zone,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE public.protein_accessions OWNER TO postgres;
+
+--
+-- Name: protein_ecs_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE protein_ecs_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.protein_ecs_id_seq OWNER TO postgres;
+
+--
+-- Name: protein_ecs; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE protein_ecs (
+    id integer DEFAULT nextval('protein_ecs_id_seq'::regclass) NOT NULL,
+    protein_id integer,
+    ec_id integer,
+    created_at timestamp with time zone,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE public.protein_ecs OWNER TO postgres;
+
+--
+-- Name: protein_maps_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE protein_maps_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.protein_maps_id_seq OWNER TO postgres;
+
+--
+-- Name: protein_maps; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE protein_maps (
+    id integer DEFAULT nextval('protein_maps_id_seq'::regclass) NOT NULL,
+    protein_id integer,
+    map_id integer,
+    created_at timestamp with time zone,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE public.protein_maps OWNER TO postgres;
+
+--
+-- Name: protein_pdb_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE protein_pdb_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.protein_pdb_id_seq OWNER TO postgres;
+
+--
+-- Name: protein_pdbs; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE protein_pdbs (
+    id integer DEFAULT nextval('protein_pdb_id_seq'::regclass) NOT NULL,
+    protein_id integer,
+    pdb_id character varying(255) DEFAULT NULL::character varying
+);
+
+
+ALTER TABLE public.protein_pdbs OWNER TO postgres;
+
+--
+-- Name: proteins_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE proteins_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.proteins_id_seq OWNER TO postgres;
+
+--
+-- Name: proteins; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE proteins (
+    id integer DEFAULT nextval('proteins_id_seq'::regclass) NOT NULL,
+    "multimericOrSubunit" integer,
+    size integer,
+    sequence text,
+    identification character varying(255) DEFAULT NULL::character varying(255),
+    "isEnzyme" integer,
+    organism_id integer,
+    database_id integer,
+    created_at timestamp with time zone,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL,
+    description character varying(3000) DEFAULT NULL::character varying(3000),
+    full_fasta_header text
+);
+
+
+ALTER TABLE public.proteins OWNER TO postgres;
+
+--
+-- Name: similarities_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE similarities_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.similarities_id_seq OWNER TO postgres;
+
+--
+-- Name: similarities; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE similarities (
+    id integer DEFAULT nextval('similarities_id_seq'::regclass) NOT NULL,
+    method_id integer,
+    clustering_method_id integer,
+    seq1_id integer,
+    seq2_id integer,
+    score integer,
+    coverage integer,
+    created_at timestamp with time zone,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE public.similarities OWNER TO postgres;
+
+--
+-- Name: similarity_methods_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE similarity_methods_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.similarity_methods_id_seq OWNER TO postgres;
+
+--
+-- Name: similarity_methods; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE similarity_methods (
+    id integer DEFAULT nextval('similarity_methods_id_seq'::regclass) NOT NULL,
+    method character varying(255) DEFAULT NULL::character varying(255),
+    software character varying(255) DEFAULT NULL::character varying(255),
+    version character varying(255) DEFAULT NULL::character varying(255),
+    "installedDirectory" character varying(255) DEFAULT NULL::character varying(255),
+    website character varying(255) DEFAULT NULL::character varying(255),
+    author character varying(255) DEFAULT NULL::character varying(255),
+    created_at timestamp with time zone,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE public.similarity_methods OWNER TO postgres;
+
+--
+-- Name: source_databases_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE source_databases_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.source_databases_id_seq OWNER TO postgres;
+
+--
+-- Name: source_databases; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE source_databases (
+    id integer DEFAULT nextval('source_databases_id_seq'::regclass) NOT NULL,
+    name character varying(200) DEFAULT NULL::character varying(200),
+    date timestamp with time zone,
+    site character varying(255) DEFAULT NULL::character varying(200),
+    version character varying(20) DEFAULT NULL::character varying(200),
+    size bigint,
+    "installedDirectory" character varying(200) DEFAULT NULL::character varying(200),
+    created_at timestamp with time zone,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE public.source_databases OWNER TO postgres;
+
+--
+-- Name: taxonomic_groups_level3_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE taxonomic_groups_level3_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.taxonomic_groups_level3_id_seq OWNER TO postgres;
+
+--
+-- Name: taxonomic_groups_level3; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE taxonomic_groups_level3 (
+    id integer DEFAULT nextval('taxonomic_groups_level3_id_seq'::regclass) NOT NULL,
+    group_name character varying(255) DEFAULT NULL::character varying,
+    kingdom_id integer
+);
+
+
+ALTER TABLE public.taxonomic_groups_level3 OWNER TO postgres;
+
+--
+-- Name: taxonomic_groups_level4_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE taxonomic_groups_level4_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.taxonomic_groups_level4_id_seq OWNER TO postgres;
+
+--
+-- Name: taxonomic_groups_level4; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE taxonomic_groups_level4 (
+    id integer DEFAULT nextval('taxonomic_groups_level4_id_seq'::regclass) NOT NULL,
+    group_name character varying(255) DEFAULT NULL::character varying,
+    taxonomic_group3_id integer
+);
+
+
+ALTER TABLE public.taxonomic_groups_level4 OWNER TO postgres;
+
+--
+-- Name: taxonomies_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE taxonomies_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.taxonomies_id_seq OWNER TO postgres;
+
+--
+-- Name: taxonomies; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE taxonomies (
+    id integer DEFAULT nextval('taxonomies_id_seq'::regclass) NOT NULL,
+    taxonomy character varying(200) DEFAULT NULL::character varying,
+    created_at timestamp with time zone,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE public.taxonomies OWNER TO postgres;
+
+--
+-- Name: testtable; Type: TABLE; Schema: public; Owner: anendb; Tablespace: 
+--
+
+CREATE TABLE testtable (
+    id integer NOT NULL,
+    testfield character varying(255)
+);
+
+
+ALTER TABLE public.testtable OWNER TO anendb;
+
+--
+-- Name: clustering_methods_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY clustering_methods
+    ADD CONSTRAINT clustering_methods_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: clusters_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY clusters
+    ADD CONSTRAINT clusters_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: ec_maps_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY ec_maps
+    ADD CONSTRAINT ec_maps_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: ecs_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY ecs
+    ADD CONSTRAINT ecs_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: genome_comparison_clusters_id_key; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY genome_comparison_clusters
+    ADD CONSTRAINT genome_comparison_clusters_id_key UNIQUE (id);
+
+
+--
+-- Name: genome_comparisons_id_key; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY genome_comparisons
+    ADD CONSTRAINT genome_comparisons_id_key UNIQUE (id);
+
+
+--
+-- Name: kingdoms_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY kingdoms
+    ADD CONSTRAINT kingdoms_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: map_arrow_coordinates_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY map_arrow_coordinates
+    ADD CONSTRAINT map_arrow_coordinates_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: map_arrows_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY map_arrows
+    ADD CONSTRAINT map_arrows_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: map_line_coordinates_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY map_line_coordinates
+    ADD CONSTRAINT map_line_coordinates_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: map_lines_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY map_lines
+    ADD CONSTRAINT map_lines_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: map_polygon_coordinates_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY map_polygon_coordinates
+    ADD CONSTRAINT map_polygon_coordinates_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: map_polygons_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY map_polygons
+    ADD CONSTRAINT map_polygons_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: map_rectangle_coordinates_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY map_rectangle_coordinates
+    ADD CONSTRAINT map_rectangle_coordinates_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: map_rectangles_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY map_rectangles
+    ADD CONSTRAINT map_rectangles_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: metabolic_pathways_maps_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY metabolic_pathways_maps
+    ADD CONSTRAINT metabolic_pathways_maps_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: metabolic_pathways_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY metabolic_pathways
+    ADD CONSTRAINT metabolic_pathways_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: organism_ecs_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY organism_ecs
+    ADD CONSTRAINT organism_ecs_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: organism_maps_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY organism_maps
+    ADD CONSTRAINT organism_maps_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: organism_rectangle_coordinates_id_key; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY organism_rectangle_coordinates
+    ADD CONSTRAINT organism_rectangle_coordinates_id_key UNIQUE (id);
+
+
+--
+-- Name: organisms_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY organisms
+    ADD CONSTRAINT organisms_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: pathway_subsystems_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY pathway_subsystems
+    ADD CONSTRAINT pathway_subsystems_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: pathway_systems_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY pathway_systems
+    ADD CONSTRAINT pathway_systems_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: pk_domain; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY domains
+    ADD CONSTRAINT pk_domain PRIMARY KEY (id);
+
+
+--
+-- Name: pk_ecrectangles; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY ec_rectangles
+    ADD CONSTRAINT pk_ecrectangles PRIMARY KEY (id);
+
+
+--
+-- Name: pk_protein_pdbs; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY protein_pdbs
+    ADD CONSTRAINT pk_protein_pdbs PRIMARY KEY (id);
+
+
+--
+-- Name: pk_tax4; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY taxonomic_groups_level4
+    ADD CONSTRAINT pk_tax4 PRIMARY KEY (id);
+
+
+--
+-- Name: pk_tax_level3; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY taxonomic_groups_level3
+    ADD CONSTRAINT pk_tax_level3 PRIMARY KEY (id);
+
+
+--
+-- Name: pkey_intragenomic; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY ec_intragenomic_analogy
+    ADD CONSTRAINT pkey_intragenomic PRIMARY KEY (id);
+
+
+--
+-- Name: protein_ecs_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY protein_ecs
+    ADD CONSTRAINT protein_ecs_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: protein_maps_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY protein_maps
+    ADD CONSTRAINT protein_maps_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: proteins_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY proteins
+    ADD CONSTRAINT proteins_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: similarities_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY similarities
+    ADD CONSTRAINT similarities_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: similarity_methods_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY similarity_methods
+    ADD CONSTRAINT similarity_methods_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: source_databases_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY source_databases
+    ADD CONSTRAINT source_databases_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: uniq_tax_id; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY taxonomies
+    ADD CONSTRAINT uniq_tax_id UNIQUE (id);
+
+
+--
+-- Name: unique_id; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY accessions
+    ADD CONSTRAINT unique_id UNIQUE (id);
+
+
+--
+-- Name: unique_id_ot; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY organism_taxonomies
+    ADD CONSTRAINT unique_id_ot UNIQUE (id);
+
+
+--
+-- Name: unique_reaction_class_id; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY ec_reaction_classes
+    ADD CONSTRAINT unique_reaction_class_id UNIQUE (id);
+
+
+--
+-- Name: clusters_cluster_identification_idx; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX clusters_cluster_identification_idx ON clusters USING btree (cluster_identification);
+
+
+--
+-- Name: clusters_ec_id_idx; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX clusters_ec_id_idx ON clusters USING btree (ec_id);
+
+
+--
+-- Name: clusters_id_idx; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX clusters_id_idx ON clusters USING btree (id);
+
+
+--
+-- Name: clusters_protein_id_idx; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX clusters_protein_id_idx ON clusters USING btree (protein_id);
+
+
+--
+-- Name: ecs_ec_idx; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX ecs_ec_idx ON ecs USING btree (ec);
+
+
+--
+-- Name: ecs_id_idx; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX ecs_id_idx ON ecs USING btree (id);
+
+
+--
+-- Name: genome_comparison_clusters_cluster_identification_idx; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX genome_comparison_clusters_cluster_identification_idx ON genome_comparison_clusters USING btree (cluster_identification);
+
+
+--
+-- Name: genome_comparison_clusters_genome_comparison_id_idx; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX genome_comparison_clusters_genome_comparison_id_idx ON genome_comparison_clusters USING btree (genome_comparison_id);
+
+
+--
+-- Name: genome_comparison_clusters_id_idx; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX genome_comparison_clusters_id_idx ON genome_comparison_clusters USING btree (id);
+
+
+--
+-- Name: genome_comparison_clusters_protein_ids_idx; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX genome_comparison_clusters_protein_ids_idx ON genome_comparison_clusters USING btree (protein_ids);
+
+
+--
+-- Name: genome_comparisons_domain_id_idx; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX genome_comparisons_domain_id_idx ON genome_comparisons USING btree (domain_id);
+
+
+--
+-- Name: genome_comparisons_domain_id_idx1; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX genome_comparisons_domain_id_idx1 ON genome_comparisons USING btree (domain_id);
+
+
+--
+-- Name: genome_comparisons_ec_id_idx; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX genome_comparisons_ec_id_idx ON genome_comparisons USING btree (ec_id);
+
+
+--
+-- Name: genome_comparisons_ec_id_idx1; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX genome_comparisons_ec_id_idx1 ON genome_comparisons USING btree (ec_id);
+
+
+--
+-- Name: genome_comparisons_id_idx; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX genome_comparisons_id_idx ON genome_comparisons USING btree (id);
+
+
+--
+-- Name: genome_comparisons_id_idx1; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX genome_comparisons_id_idx1 ON genome_comparisons USING btree (id);
+
+
+--
+-- Name: genome_comparisons_kingdom_id_idx; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX genome_comparisons_kingdom_id_idx ON genome_comparisons USING btree (kingdom_id);
+
+
+--
+-- Name: genome_comparisons_organism_id_idx; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX genome_comparisons_organism_id_idx ON genome_comparisons USING btree (organism_id);
+
+
+--
+-- Name: genome_comparisons_organism_id_idx1; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX genome_comparisons_organism_id_idx1 ON genome_comparisons USING btree (organism_id);
+
+
+--
+-- Name: genome_comparisons_taxonomic_group_level3_id_idx; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX genome_comparisons_taxonomic_group_level3_id_idx ON genome_comparisons USING btree (taxonomic_group_level3_id);
+
+
+--
+-- Name: genome_comparisons_taxonomic_group_level4_id_idx; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX genome_comparisons_taxonomic_group_level4_id_idx ON genome_comparisons USING btree (taxonomic_group_level4_id);
+
+
+--
+-- Name: organism_ecs_ec_id_idx; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX organism_ecs_ec_id_idx ON organism_ecs USING btree (ec_id);
+
+
+--
+-- Name: organism_ecs_id_idx; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX organism_ecs_id_idx ON organism_ecs USING btree (id);
+
+
+--
+-- Name: organism_ecs_organism_id_idx; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX organism_ecs_organism_id_idx ON organism_ecs USING btree (organism_id);
+
+
+--
+-- Name: organism_rectangle_coordinates_id_idx; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX organism_rectangle_coordinates_id_idx ON organism_rectangle_coordinates USING btree (id);
+
+
+--
+-- Name: organism_rectangle_coordinates_map_id_idx; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX organism_rectangle_coordinates_map_id_idx ON organism_rectangle_coordinates USING btree (map_id);
+
+
+--
+-- Name: organism_rectangle_coordinates_organism_id_idx; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX organism_rectangle_coordinates_organism_id_idx ON organism_rectangle_coordinates USING btree (organism_id);
+
+
+--
+-- Name: protein_ecs_ec_id_idx; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX protein_ecs_ec_id_idx ON protein_ecs USING btree (ec_id);
+
+
+--
+-- Name: protein_ecs_id_idx; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX protein_ecs_id_idx ON protein_ecs USING btree (id);
+
+
+--
+-- Name: protein_ecs_protein_id_idx; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX protein_ecs_protein_id_idx ON protein_ecs USING btree (protein_id);
+
+
+--
+-- Name: protein_maps_id_idx; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX protein_maps_id_idx ON protein_maps USING btree (id);
+
+
+--
+-- Name: protein_maps_map_id_idx; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX protein_maps_map_id_idx ON protein_maps USING btree (map_id);
+
+
+--
+-- Name: protein_maps_map_id_idx1; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX protein_maps_map_id_idx1 ON protein_maps USING btree (map_id);
+
+
+--
+-- Name: protein_maps_protein_id_idx; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX protein_maps_protein_id_idx ON protein_maps USING btree (protein_id);
+
+
+--
+-- Name: protein_maps_protein_id_idx1; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX protein_maps_protein_id_idx1 ON protein_maps USING btree (protein_id);
+
+
+--
+-- Name: protein_pdbs_id_idx; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX protein_pdbs_id_idx ON protein_pdbs USING btree (id);
+
+
+--
+-- Name: protein_pdbs_pdb_id_idx; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX protein_pdbs_pdb_id_idx ON protein_pdbs USING btree (pdb_id);
+
+
+--
+-- Name: protein_pdbs_protein_id_idx; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX protein_pdbs_protein_id_idx ON protein_pdbs USING btree (protein_id);
+
+
+--
+-- Name: proteins_description_idx; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX proteins_description_idx ON proteins USING btree (description);
+
+
+--
+-- Name: proteins_id_idx; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX proteins_id_idx ON proteins USING btree (id);
+
+
+--
+-- Name: proteins_identification_idx; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX proteins_identification_idx ON proteins USING btree (identification);
+
+
+--
+-- Name: proteins_identification_idx1; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX proteins_identification_idx1 ON proteins USING btree (identification);
+
+
+--
+-- Name: proteins_identification_idx2; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX proteins_identification_idx2 ON proteins USING btree (identification);
+
+
+--
+-- Name: proteins_identification_idx3; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX proteins_identification_idx3 ON proteins USING btree (identification);
+
+
+--
+-- Name: similarities_id_idx; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX similarities_id_idx ON similarities USING btree (id);
+
+
+--
+-- Name: similarities_seq1_id_idx; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX similarities_seq1_id_idx ON similarities USING btree (seq1_id);
+
+
+--
+-- Name: similarities_seq2_id_idx; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX similarities_seq2_id_idx ON similarities USING btree (seq2_id);
+
+
+--
+-- Name: fk_accession_protein; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY protein_accessions
+    ADD CONSTRAINT fk_accession_protein FOREIGN KEY (accession_id) REFERENCES accessions(id);
+
+
+--
+-- Name: fk_cluster_protein; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY clusters
+    ADD CONSTRAINT fk_cluster_protein FOREIGN KEY (protein_id) REFERENCES proteins(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: fk_clustering_method; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY clusters
+    ADD CONSTRAINT fk_clustering_method FOREIGN KEY (clustering_method_id) REFERENCES clustering_methods(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: fk_database_source; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY proteins
+    ADD CONSTRAINT fk_database_source FOREIGN KEY (database_id) REFERENCES source_databases(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: fk_domain; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY organisms
+    ADD CONSTRAINT fk_domain FOREIGN KEY (domain_id) REFERENCES domains(id);
+
+
+--
+-- Name: fk_domain_gen_comparison; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY genome_comparisons
+    ADD CONSTRAINT fk_domain_gen_comparison FOREIGN KEY (domain_id) REFERENCES domains(id);
+
+
+--
+-- Name: fk_domain_kingdom; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY kingdoms
+    ADD CONSTRAINT fk_domain_kingdom FOREIGN KEY (domain_id) REFERENCES kingdoms(id);
+
+
+--
+-- Name: fk_ec; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY protein_ecs
+    ADD CONSTRAINT fk_ec FOREIGN KEY (ec_id) REFERENCES ecs(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: fk_ec_cluster; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY clusters
+    ADD CONSTRAINT fk_ec_cluster FOREIGN KEY (ec_id) REFERENCES ecs(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: fk_ec_ec; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY ec_rectangles
+    ADD CONSTRAINT fk_ec_ec FOREIGN KEY (ec_id) REFERENCES ecs(id);
+
+
+--
+-- Name: fk_ec_gen_comparison; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY genome_comparisons
+    ADD CONSTRAINT fk_ec_gen_comparison FOREIGN KEY (ec_id) REFERENCES ecs(id);
+
+
+--
+-- Name: fk_ec_intra; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY ec_intragenomic_analogy
+    ADD CONSTRAINT fk_ec_intra FOREIGN KEY (ec_id) REFERENCES ecs(id);
+
+
+--
+-- Name: fk_ec_map; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY ec_maps
+    ADD CONSTRAINT fk_ec_map FOREIGN KEY (ec_id) REFERENCES ecs(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: fk_gen_comp; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY genome_comparison_clusters
+    ADD CONSTRAINT fk_gen_comp FOREIGN KEY (genome_comparison_id) REFERENCES genome_comparisons(id);
+
+
+--
+-- Name: fk_kingdom; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY organisms
+    ADD CONSTRAINT fk_kingdom FOREIGN KEY (kingdom_id) REFERENCES kingdoms(id);
+
+
+--
+-- Name: fk_kingdom_gen_comparison; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY genome_comparisons
+    ADD CONSTRAINT fk_kingdom_gen_comparison FOREIGN KEY (kingdom_id) REFERENCES kingdoms(id);
+
+
+--
+-- Name: fk_kingdom_tax3; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY taxonomic_groups_level3
+    ADD CONSTRAINT fk_kingdom_tax3 FOREIGN KEY (kingdom_id) REFERENCES kingdoms(id);
+
+
+--
+-- Name: fk_map; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY map_rectangles
+    ADD CONSTRAINT fk_map FOREIGN KEY (map_id) REFERENCES metabolic_pathways_maps(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: fk_map_arrow; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY map_arrow_coordinates
+    ADD CONSTRAINT fk_map_arrow FOREIGN KEY (arrow_id) REFERENCES map_arrows(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: fk_map_line; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY map_line_coordinates
+    ADD CONSTRAINT fk_map_line FOREIGN KEY (line_id) REFERENCES map_lines(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: fk_map_organism; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY organism_maps
+    ADD CONSTRAINT fk_map_organism FOREIGN KEY (map_id) REFERENCES metabolic_pathways(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: fk_map_polygon; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY map_polygon_coordinates
+    ADD CONSTRAINT fk_map_polygon FOREIGN KEY (polygon_id) REFERENCES map_polygons(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: fk_map_protein; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY protein_maps
+    ADD CONSTRAINT fk_map_protein FOREIGN KEY (map_id) REFERENCES metabolic_pathways_maps(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: fk_map_rectangle; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY map_rectangle_coordinates
+    ADD CONSTRAINT fk_map_rectangle FOREIGN KEY (rectangle_id) REFERENCES map_rectangles(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: fk_map_rectangle; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY organism_rectangle_coordinates
+    ADD CONSTRAINT fk_map_rectangle FOREIGN KEY (map_id) REFERENCES metabolic_pathways_maps(id);
+
+
+--
+-- Name: fk_maps; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY ec_maps
+    ADD CONSTRAINT fk_maps FOREIGN KEY (map_id) REFERENCES metabolic_pathways_maps(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: fk_metabolic_pathway_map; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY map_lines
+    ADD CONSTRAINT fk_metabolic_pathway_map FOREIGN KEY (map_id) REFERENCES metabolic_pathways_maps(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: fk_metabolic_pathway_maps; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY map_arrows
+    ADD CONSTRAINT fk_metabolic_pathway_maps FOREIGN KEY (map_id) REFERENCES metabolic_pathways_maps(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: fk_organism; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY proteins
+    ADD CONSTRAINT fk_organism FOREIGN KEY (organism_id) REFERENCES organisms(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: fk_organism_ec_ec; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY organism_ecs
+    ADD CONSTRAINT fk_organism_ec_ec FOREIGN KEY (ec_id) REFERENCES ecs(id);
+
+
+--
+-- Name: fk_organism_ec_organism; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY organism_ecs
+    ADD CONSTRAINT fk_organism_ec_organism FOREIGN KEY (organism_id) REFERENCES organisms(id);
+
+
+--
+-- Name: fk_organism_gen_comparison; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY genome_comparisons
+    ADD CONSTRAINT fk_organism_gen_comparison FOREIGN KEY (organism_id) REFERENCES organisms(id);
+
+
+--
+-- Name: fk_organism_map; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY organism_maps
+    ADD CONSTRAINT fk_organism_map FOREIGN KEY (organism_id) REFERENCES organisms(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: fk_organism_rectangle; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY organism_rectangle_coordinates
+    ADD CONSTRAINT fk_organism_rectangle FOREIGN KEY (organism_id) REFERENCES organisms(id);
+
+
+--
+-- Name: fk_organism_taxonomy; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY organism_taxonomies
+    ADD CONSTRAINT fk_organism_taxonomy FOREIGN KEY (organism_id) REFERENCES organisms(id);
+
+
+--
+-- Name: fk_pathway; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY metabolic_pathways_maps
+    ADD CONSTRAINT fk_pathway FOREIGN KEY (metabolic_pathway_id) REFERENCES metabolic_pathways(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: fk_pathway_map; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY map_polygons
+    ADD CONSTRAINT fk_pathway_map FOREIGN KEY (map_id) REFERENCES metabolic_pathways_maps(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: fk_pathway_subsystem; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY metabolic_pathways
+    ADD CONSTRAINT fk_pathway_subsystem FOREIGN KEY (subsystem_id) REFERENCES pathway_subsystems(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: fk_pathway_system; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY pathway_subsystems
+    ADD CONSTRAINT fk_pathway_system FOREIGN KEY (system_id) REFERENCES pathway_systems(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: fk_protein; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY protein_ecs
+    ADD CONSTRAINT fk_protein FOREIGN KEY (protein_id) REFERENCES proteins(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: fk_protein_accession; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY protein_accessions
+    ADD CONSTRAINT fk_protein_accession FOREIGN KEY (protein_id) REFERENCES proteins(id);
+
+
+--
+-- Name: fk_protein_map; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY protein_maps
+    ADD CONSTRAINT fk_protein_map FOREIGN KEY (protein_id) REFERENCES proteins(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: fk_protein_pdb; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY protein_pdbs
+    ADD CONSTRAINT fk_protein_pdb FOREIGN KEY (protein_id) REFERENCES proteins(id);
+
+
+--
+-- Name: fk_reaction_class; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY ecs
+    ADD CONSTRAINT fk_reaction_class FOREIGN KEY (ec_reaction_class_id) REFERENCES ec_reaction_classes(id);
+
+
+--
+-- Name: fk_rectangle_ec; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY ec_rectangles
+    ADD CONSTRAINT fk_rectangle_ec FOREIGN KEY (rectangle_id) REFERENCES map_rectangles(id);
+
+
+--
+-- Name: fk_s_clustering_method; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY similarities
+    ADD CONSTRAINT fk_s_clustering_method FOREIGN KEY (clustering_method_id) REFERENCES clustering_methods(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: fk_seq1; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY similarities
+    ADD CONSTRAINT fk_seq1 FOREIGN KEY (seq1_id) REFERENCES proteins(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: fk_seq2; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY similarities
+    ADD CONSTRAINT fk_seq2 FOREIGN KEY (seq2_id) REFERENCES proteins(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: fk_similarity_method; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY similarities
+    ADD CONSTRAINT fk_similarity_method FOREIGN KEY (method_id) REFERENCES similarity_methods(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: fk_source_database; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY organisms
+    ADD CONSTRAINT fk_source_database FOREIGN KEY (database_id) REFERENCES source_databases(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: fk_tax3_gen_comparison; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY genome_comparisons
+    ADD CONSTRAINT fk_tax3_gen_comparison FOREIGN KEY (taxonomic_group_level3_id) REFERENCES taxonomic_groups_level3(id);
+
+
+--
+-- Name: fk_tax4_gen_comparison; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY genome_comparisons
+    ADD CONSTRAINT fk_tax4_gen_comparison FOREIGN KEY (taxonomic_group_level4_id) REFERENCES taxonomic_groups_level4(id);
+
+
+--
+-- Name: fk_taxgroup3; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY organisms
+    ADD CONSTRAINT fk_taxgroup3 FOREIGN KEY (taxonomic_group3_id) REFERENCES taxonomic_groups_level3(id);
+
+
+--
+-- Name: fk_taxgroup3_taxgroup4; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY taxonomic_groups_level4
+    ADD CONSTRAINT fk_taxgroup3_taxgroup4 FOREIGN KEY (taxonomic_group3_id) REFERENCES taxonomic_groups_level3(id);
+
+
+--
+-- Name: fk_taxgroup4; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY organisms
+    ADD CONSTRAINT fk_taxgroup4 FOREIGN KEY (taxonomic_group4_id) REFERENCES taxonomic_groups_level4(id);
+
+
+--
+-- Name: fk_taxonomy_organism; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY organism_taxonomies
+    ADD CONSTRAINT fk_taxonomy_organism FOREIGN KEY (taxonomy_id) REFERENCES taxonomies(id);
+
+
+--
+-- Name: public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM postgres;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO anendb;
+
+
+--
+-- Name: testtable; Type: ACL; Schema: public; Owner: anendb
+--
+
+REVOKE ALL ON TABLE testtable FROM PUBLIC;
+REVOKE ALL ON TABLE testtable FROM anendb;
+GRANT ALL ON TABLE testtable TO anendb;
+
+
+--
+-- PostgreSQL database dump complete
+--
+
