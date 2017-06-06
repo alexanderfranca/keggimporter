@@ -1,6 +1,5 @@
 install.sh
 *~
-KeggReader.egg-info
 dist
 *.sh
 result*

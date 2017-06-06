@@ -1,0 +1,468 @@
+1	1	04144	Endocytosis
+2	1	04145	Phagosome
+3	1	04146	Peroxisome
+4	1	04140	Regulation of autophagy
+5	1	04142	Lysosome
+6	2	04540	Gap junction
+7	2	04510	Focal adhesion
+8	2	04530	Tight junction
+9	2	04520	Adherens junction
+10	2	04550	Signaling pathways regulating pluripotency of stem cells
+11	3	04810	Regulation of actin cytoskeleton
+12	3	02030	Bacterial chemotaxis
+13	3	02040	Flagellar assembly
+14	4	04115	p53 signaling pathway
+15	4	04114	Oocyte meiosis
+16	4	04113	Meiosis - yeast
+17	4	04112	Cell cycle - Caulobacter
+18	4	04111	Cell cycle - yeast
+19	4	04110	Cell cycle
+20	4	04210	Apoptosis
+21	5	07031	Butyrophenones
+22	5	07030	Anxiolytics
+23	5	07033	Anticonvulsants
+24	5	07032	Hypnotics
+25	5	07027	Antidepressants
+26	5	07039	Opioid analgesics
+27	5	07015	Local analgesics
+28	5	07029	Phenothiazines
+29	5	07056	Agents for Alzheimer-type dementia
+30	5	07057	Antiparkinsonian agents
+31	5	07028	Antipsychotics
+32	6	07220	Cholinergic and anticholinergic drugs
+33	6	07224	Opioid receptor agonists/antagonists
+34	6	07227	Histamine H2/H3 receptor agonists/antagonists
+35	6	07228	Eicosanoid receptor agonists/antagonists
+36	6	07229	Angiotensin receptor and endothelin receptor antagonists
+37	6	07211	Serotonin receptor agonists/antagonists
+38	6	07213	Dopamine receptor agonists/antagonists
+39	6	07212	Histamine H1 receptor antagonists
+40	6	07215	alpha-Adrenergic receptor agonists/antagonists
+41	6	07214	beta-Adrenergic receptor agonists/antagonists
+42	7	07222	Peroxisome proliferator-activated receptor (PPAR) agonists
+43	7	07223	Retinoic acid receptor (RAR) and retinoid X receptor (RXR) agonists/antagonists
+44	7	07225	Glucocorticoid and meneralocorticoid receptor agonists/antagonists
+45	7	07226	Progesterone, androgen and estrogen receptor agonists/antagonists
+46	8	07219	Cyclooxygenase inhibitors
+47	8	07218	HIV protease inhibitors
+48	8	07217	Renin-angiotensin system inhibitors
+49	8	07024	HMG-CoA reductase inhibitors
+50	8	07216	Catecholamine transferase inhibitors
+51	9	07221	Nicotinic cholinergic receptor antagonists
+52	9	07235	N-Metyl-D-aspartic acid receptor antagonists
+53	9	07232	Potassium channel blocking and opening drugs
+54	9	07231	Sodium channel blocking drugs
+55	9	07036	Calcium channel blocking drugs
+56	9	07230	GABA-A receptor agonists/antagonists
+57	10	07112	1,2-Diphenyl substitution family
+58	10	07110	Benzoic acid family
+59	10	07117	Benzodiazepine family
+60	10	07114	Naphthalene family
+61	11	07044	Antivirals
+62	11	07023	Rifamycins
+63	11	07020	Macrolides and ketolides
+64	11	07021	Aminoglycosides
+65	11	07026	Antifungal agents
+66	11	07019	Tetracyclines
+67	11	07014	Quinolones
+68	11	07013	Cephalosporins - oral agents
+69	11	07012	Cephalosporins - parenteral agents
+70	11	07011	Penicillins
+71	11	07053	Anti-HIV agents
+72	12	07234	Neurotransmitter transporter inhibitors
+73	12	07233	Ion transporter inhibitors
+74	13	07035	Prostaglandins
+75	13	07034	Eicosanoids
+76	13	07025	Quinolines
+77	14	07046	Immunosuppressive agents
+78	14	07047	Osteoporosis drugs
+79	14	07037	Antiarrhythmic drugs
+80	14	07018	Sulfonamide derivatives - hypoglycemic agents
+81	14	07017	Sulfonamide derivatives - diuretics
+82	14	07016	Sulfonamide derivatives - sulfa drugs
+83	14	07048	Antimigraines
+84	14	07049	Antithrombosis agents
+85	14	07038	Antiulcer drugs
+86	14	07052	Antidyslipidemic agents
+87	14	07051	Antidiabetics
+88	14	07050	Antirheumatics - DMARDs and biological agents
+89	14	07055	Sulfonamide derivatives - overview
+90	14	07054	Antiglaucoma agents
+91	15	07045	Antineoplastics - protein kinases inhibitors
+92	15	07040	Antineoplastics - alkylating agents
+93	15	07041	Antineoplastics - antimetabolic agents
+94	15	07042	Antineoplastics - agents from natural products
+95	15	07043	Antineoplastics - hormones
+96	16	05217	Basal cell carcinoma
+97	16	05216	Thyroid cancer
+98	16	05215	Prostate cancer
+99	16	05214	Glioma
+100	16	05213	Endometrial cancer
+101	16	05212	Pancreatic cancer
+102	16	05211	Renal cell carcinoma
+103	16	05210	Colorectal cancer
+104	16	05219	Bladder cancer
+105	16	05218	Melanoma
+106	16	05222	Small cell lung cancer
+107	16	05223	Non-small cell lung cancer
+108	16	05220	Chronic myeloid leukemia
+109	16	05221	Acute myeloid leukemia
+110	17	01502	Vancomycin resistance
+111	17	01501	beta-Lactam resistance
+112	18	05134	Legionellosis
+113	18	05100	Bacterial invasion of epithelial cells
+114	18	05132	Salmonella infection
+115	18	05120	Epithelial cell signaling in Helicobacter pylori infection
+116	18	05130	Pathogenic Escherichia coli infection
+117	18	05131	Shigellosis
+118	18	05133	Pertussis
+119	18	05110	Vibrio cholerae infection
+120	18	05111	Vibrio cholerae pathogenic cycle
+121	18	05150	Staphylococcus aureus infection
+122	18	05152	Tuberculosis
+123	19	05034	Alcoholism
+124	19	05033	Nicotine addiction
+125	19	05032	Morphine addiction
+126	19	05031	Amphetamine addiction
+127	19	05030	Cocaine addiction
+128	20	05414	Dilated cardiomyopathy
+129	20	05416	Viral myocarditis
+130	20	05410	Hypertrophic cardiomyopathy (HCM)
+131	20	05412	Arrhythmogenic right ventricular cardiomyopathy (ARVC)
+132	21	05161	Hepatitis B
+133	21	05160	Hepatitis C
+134	21	05162	Measles
+135	21	05164	Influenza A
+136	21	05166	HTLV-I infection
+137	21	05169	Epstein-Barr virus infection
+138	21	05168	Herpes simplex infection
+139	22	05020	Prion diseases
+140	22	05010	Alzheimer's disease
+141	22	05012	Parkinson's disease
+142	22	05014	Amyotrophic lateral sclerosis (ALS)
+143	22	05016	Huntington's disease
+144	23	05200	Pathways in cancer
+145	23	05202	Transcriptional misregulation in cancer
+146	23	05203	Viral carcinogenesis
+147	23	05204	Chemical carcinogenesis
+148	23	05205	Proteoglycans in cancer
+149	23	05206	MicroRNAs in cancer
+150	23	05231	Choline metabolism in cancer
+151	23	05230	Central carbon metabolism in cancer
+152	24	05330	Allograft rejection
+153	24	05332	Graft-versus-host disease
+154	24	05323	Rheumatoid arthritis
+155	24	05322	Systemic lupus erythematosus
+156	24	05321	Inflammatory bowel disease (IBD)
+157	24	05320	Autoimmune thyroid disease
+158	24	05340	Primary immunodeficiency
+159	24	05310	Asthma
+160	25	05146	Amoebiasis
+161	25	05145	Toxoplasmosis
+162	25	05144	Malaria
+163	25	05143	African trypanosomiasis
+164	25	05142	Chagas disease (American trypanosomiasis)
+165	25	05140	Leishmaniasis
+166	26	04950	Maturity onset diabetes of the young
+167	26	04930	Type II diabetes mellitus
+168	26	04932	Non-alcoholic fatty liver disease (NAFLD)
+169	26	04940	Type I diabetes mellitus
+170	27	03040	Spliceosome
+171	27	03022	Basal transcription factors
+172	27	03020	RNA polymerase
+173	28	03013	RNA transport
+174	28	00970	Aminoacyl-tRNA biosynthesis
+175	28	03010	Ribosome
+176	28	03008	Ribosome biogenesis in eukaryotes
+177	28	03015	mRNA surveillance pathway
+178	29	03410	Base excision repair
+179	29	03450	Non-homologous end-joining
+180	29	03460	Fanconi anemia pathway
+181	29	03430	Mismatch repair
+182	29	03420	Nucleotide excision repair
+183	29	03440	Homologous recombination
+184	29	03030	DNA replication
+185	30	03060	Protein export
+186	30	03050	Proteasome
+187	30	03018	RNA degradation
+188	30	04122	Sulfur relay system
+189	30	04130	SNARE interactions in vesicular transport
+190	30	04120	Ubiquitin mediated proteolysis
+191	30	04141	Protein processing in endoplasmic reticulum
+192	31	04075	Plant hormone signal transduction
+193	31	04370	VEGF signaling pathway
+194	31	04350	TGF-beta signaling pathway
+195	31	04012	ErbB signaling pathway
+196	31	04151	PI3K-Akt signaling pathway
+197	31	04150	mTOR signaling pathway
+198	31	04668	TNF signaling pathway
+199	31	04013	MAPK signaling pathway - fly
+200	31	04391	Hippo signaling pathway - fly
+201	31	04390	Hippo signaling pathway
+202	31	04010	MAPK signaling pathway
+203	31	04011	MAPK signaling pathway - yeast
+204	31	04070	Phosphatidylinositol signaling system
+205	31	04014	Ras signaling pathway
+206	31	04015	Rap1 signaling pathway
+207	31	02020	Two-component system
+208	31	04630	Jak-STAT signaling pathway
+209	31	04024	cAMP signaling pathway
+210	31	04022	cGMP-PKG signaling pathway
+211	31	04020	Calcium signaling pathway
+212	31	04340	Hedgehog signaling pathway
+213	31	04066	HIF-1 signaling pathway
+214	31	04064	NF-kappa B signaling pathway
+215	31	04068	FoxO signaling pathway
+216	31	04152	AMPK signaling pathway
+217	31	04310	Wnt signaling pathway
+218	31	04330	Notch signaling pathway
+219	32	02060	Phosphotransferase system (PTS)
+220	32	02010	ABC transporters
+221	32	03070	Bacterial secretion system
+222	33	04080	Neuroactive ligand-receptor interaction
+223	33	04514	Cell adhesion molecules (CAMs)
+224	33	04060	Cytokine-cytokine receptor interaction
+225	33	04512	ECM-receptor interaction
+226	34	04320	Dorso-ventral axis formation
+227	34	04380	Osteoclast differentiation
+228	34	04360	Axon guidance
+229	35	04978	Mineral absorption
+230	35	04975	Fat digestion and absorption
+231	35	04974	Protein digestion and absorption
+232	35	04977	Vitamin digestion and absorption
+233	35	04976	Bile secretion
+234	35	04971	Gastric acid secretion
+235	35	04970	Salivary secretion
+236	35	04973	Carbohydrate digestion and absorption
+237	35	04972	Pancreatic secretion
+238	36	03320	PPAR signaling pathway
+239	36	04614	Renin-angiotensin system
+240	36	04920	Adipocytokine signaling pathway
+241	36	04921	Oxytocin signaling pathway
+242	36	04919	Thyroid hormone signaling pathway
+243	36	04918	Thyroid hormone synthesis
+244	36	04917	Prolactin signaling pathway
+245	36	04916	Melanogenesis
+246	36	04915	Estrogen signaling pathway
+247	36	04914	Progesterone-mediated oocyte maturation
+248	36	04913	Ovarian steroidogenesis
+249	36	04912	GnRH signaling pathway
+250	36	04911	Insulin secretion
+251	36	04910	Insulin signaling pathway
+252	37	04966	Collecting duct acid secretion
+253	37	04964	Proximal tubule bicarbonate reclamation
+254	37	04962	Vasopressin-regulated water reabsorption
+255	37	04960	Aldosterone-regulated sodium reabsorption
+256	37	04961	Endocrine and other factor-regulated calcium reabsorption
+257	38	04626	Plant-pathogen interaction
+258	38	04711	Circadian rhythm - fly
+259	38	04710	Circadian rhythm
+260	38	04713	Circadian entrainment
+261	38	04712	Circadian rhythm - plant
+262	39	04742	Taste transduction
+263	39	04750	Inflammatory mediator regulation of TRP channels
+264	39	04740	Olfactory transduction
+265	39	04744	Phototransduction
+266	39	04745	Phototransduction - fly
+267	40	04621	NOD-like receptor signaling pathway
+268	40	04620	Toll-like receptor signaling pathway
+269	40	04623	Cytosolic DNA-sensing pathway
+270	40	04622	RIG-I-like receptor signaling pathway
+271	40	04650	Natural killer cell mediated cytotoxicity
+272	40	04610	Complement and coagulation cascades
+273	40	04611	Platelet activation
+274	40	04612	Antigen processing and presentation
+275	40	04666	Fc gamma R-mediated phagocytosis
+276	40	04062	Chemokine signaling pathway
+277	40	04664	Fc epsilon RI signaling pathway
+278	40	04640	Hematopoietic cell lineage
+279	40	04672	Intestinal immune network for IgA production
+280	40	04660	T cell receptor signaling pathway
+281	40	04670	Leukocyte transendothelial migration
+282	40	04662	B cell receptor signaling pathway
+283	41	04730	Long-term depression
+284	41	04728	Dopaminergic synapse
+285	41	04724	Glutamatergic synapse
+286	41	04725	Cholinergic synapse
+287	41	04726	Serotonergic synapse
+288	41	04727	GABAergic synapse
+289	41	04720	Long-term potentiation
+290	41	04721	Synaptic vesicle cycle
+291	41	04722	Neurotrophin signaling pathway
+292	41	04723	Retrograde endocannabinoid signaling
+293	42	04261	Adrenergic signaling in cardiomyocytes
+294	42	04260	Cardiac muscle contraction
+295	42	04270	Vascular smooth muscle contraction
+296	43	00230	Purine metabolism
+297	43	00240	Pyrimidine metabolism
+298	44	00904	Diterpenoid biosynthesis
+299	44	00905	Brassinosteroid biosynthesis
+300	44	00906	Carotenoid biosynthesis
+301	44	00900	Terpenoid backbone biosynthesis
+302	44	00902	Monoterpenoid biosynthesis
+303	44	00903	Limonene and pinene degradation
+304	44	00908	Zeatin biosynthesis
+305	44	00909	Sesquiterpenoid and triterpenoid biosynthesis
+306	44	00981	Insect hormone biosynthesis
+307	44	00522	Biosynthesis of 12-, 14- and 16-membered macrolides
+308	44	01051	Biosynthesis of ansamycins
+309	44	01053	Biosynthesis of siderophore group nonribosomal peptides
+310	44	01052	Type I polyketide structures
+311	44	01055	Biosynthesis of vancomycin group antibiotics
+312	44	01054	Nonribosomal peptide structures
+313	44	01057	Biosynthesis of type II polyketide products
+314	44	01056	Biosynthesis of type II polyketide backbone
+315	44	00523	Polyketide sugar unit biosynthesis
+316	44	00281	Geraniol degradation
+317	44	00253	Tetracycline biosynthesis
+318	45	00603	Glycosphingolipid biosynthesis - globo series
+319	45	00601	Glycosphingolipid biosynthesis - lacto and neolacto series
+320	45	00604	Glycosphingolipid biosynthesis - ganglio series
+321	45	00550	Peptidoglycan biosynthesis
+322	45	00563	Glycosylphosphatidylinositol(GPI)-anchor biosynthesis
+323	45	00531	Glycosaminoglycan degradation
+324	45	00533	Glycosaminoglycan biosynthesis - keratan sulfate
+325	45	00532	Glycosaminoglycan biosynthesis - chondroitin sulfate / dermatan sulfate
+326	45	00540	Lipopolysaccharide biosynthesis
+327	45	00534	Glycosaminoglycan biosynthesis - heparan sulfate / heparin
+328	45	00514	Other types of O-glycan biosynthesis
+329	45	00513	Various types of N-glycan biosynthesis
+330	45	00512	Mucin type O-Glycan biosynthesis
+331	45	00511	Other glycan degradation
+332	45	00510	N-Glycan biosynthesis
+333	46	00140	Steroid hormone biosynthesis
+334	46	00071	Fatty acid degradation
+335	46	00072	Synthesis and degradation of ketone bodies
+336	46	00073	Cutin, suberine and wax biosynthesis
+337	46	00062	Fatty acid elongation
+338	46	00061	Fatty acid biosynthesis
+339	46	00590	Arachidonic acid metabolism
+340	46	00564	Glycerophospholipid metabolism
+341	46	00565	Ether lipid metabolism
+342	46	00561	Glycerolipid metabolism
+343	46	01040	Biosynthesis of unsaturated fatty acids
+344	46	00600	Sphingolipid metabolism
+345	46	00120	Primary bile acid biosynthesis
+346	46	00121	Secondary bile acid biosynthesis
+347	46	00591	Linoleic acid metabolism
+348	46	00100	Steroid biosynthesis
+349	46	00592	alpha-Linolenic acid metabolism
+350	47	00910	Nitrogen metabolism
+351	47	00710	Carbon fixation in photosynthetic organisms
+352	47	00190	Oxidative phosphorylation
+353	47	00196	Photosynthesis - antenna proteins
+354	47	00195	Photosynthesis
+355	47	00720	Carbon fixation pathways in prokaryotes
+356	47	00680	Methane metabolism
+357	47	00920	Sulfur metabolism
+358	48	00460	Cyanoamino acid metabolism
+359	48	00440	Phosphonate and phosphinate metabolism
+360	48	00450	Selenocompound metabolism
+361	48	00410	beta-Alanine metabolism
+362	48	00471	D-Glutamine and D-glutamate metabolism
+363	48	00472	D-Arginine and D-ornithine metabolism
+364	48	00473	D-Alanine metabolism
+365	48	00430	Taurine and hypotaurine metabolism
+366	48	00480	Glutathione metabolism
+367	49	00790	Folate biosynthesis
+368	49	00780	Biotin metabolism
+369	49	00770	Pantothenate and CoA biosynthesis
+370	49	00830	Retinol metabolism
+371	49	00750	Vitamin B6 metabolism
+372	49	00740	Riboflavin metabolism
+373	49	00785	Lipoic acid metabolism
+374	49	00670	One carbon pool by folate
+375	49	00760	Nicotinate and nicotinamide metabolism
+376	49	00860	Porphyrin and chlorophyll metabolism
+377	49	00130	Ubiquinone and other terpenoid-quinone biosynthesis
+378	49	00730	Thiamine metabolism
+379	50	00351	DDT degradation
+380	50	00643	Styrene degradation
+381	50	00642	Ethylbenzene degradation
+382	50	00625	Chloroalkane and chloroalkene degradation
+383	50	00624	Polycyclic aromatic hydrocarbon degradation
+384	50	00627	Aminobenzoate degradation
+385	50	00626	Naphthalene degradation
+386	50	00621	Dioxin degradation
+387	50	00623	Toluene degradation
+388	50	00622	Xylene degradation
+389	50	00984	Steroid degradation
+390	50	00980	Metabolism of xenobiotics by cytochrome P450
+391	50	00982	Drug metabolism - cytochrome P450
+392	50	00983	Drug metabolism - other enzymes
+393	50	00791	Atrazine degradation
+394	50	00930	Caprolactam degradation
+395	50	00361	Chlorocyclohexane and chlorobenzene degradation
+396	50	00362	Benzoate degradation
+397	50	00363	Bisphenol degradation
+398	50	00364	Fluorobenzoate degradation
+399	50	00365	Furfural degradation
+400	50	00633	Nitrotoluene degradation
+401	51	00360	Phenylalanine metabolism
+402	51	00380	Tryptophan metabolism
+403	51	00400	Phenylalanine, tyrosine and tryptophan biosynthesis
+404	51	00330	Arginine and proline metabolism
+405	51	00310	Lysine degradation
+406	51	00300	Lysine biosynthesis
+407	51	00350	Tyrosine metabolism
+408	51	00340	Histidine metabolism
+409	51	00260	Glycine, serine and threonine metabolism
+410	51	00270	Cysteine and methionine metabolism
+411	51	00290	Valine, leucine and isoleucine biosynthesis
+412	51	00250	Alanine, aspartate and glutamate metabolism
+413	51	00280	Valine, leucine and isoleucine degradation
+414	52	01010	Overview of biosynthetic pathways
+415	52	01060	Biosynthesis of plant secondary metabolites
+416	52	01061	Biosynthesis of phenylpropanoids
+417	52	01062	Biosynthesis of terpenoids and steroids
+418	52	01063	Biosynthesis of alkaloids derived from shikimate pathway
+419	52	01064	Biosynthesis of alkaloids derived from ornithine, lysine and nicotinic acid
+420	52	01065	Biosynthesis of alkaloids derived from histidine and purine
+421	52	01066	Biosynthesis of alkaloids derived from terpenoid and polyketide
+422	52	01070	Biosynthesis of plant hormones
+423	53	01110	Biosynthesis of secondary metabolites
+424	53	01100	Metabolic pathways
+425	53	01212	Fatty acid metabolism
+426	53	01210	2-Oxocarboxylic acid metabolism
+427	53	01230	Biosynthesis of amino acids
+428	53	01220	Degradation of aromatic compounds
+429	53	01120	Microbial metabolism in diverse environments
+430	53	01200	Carbon metabolism
+431	54	00960	Tropane, piperidine and pyridine alkaloid biosynthesis
+432	54	00966	Glucosinolate biosynthesis
+433	54	00901	Indole alkaloid biosynthesis
+434	54	00965	Betalain biosynthesis
+435	54	00940	Phenylpropanoid biosynthesis
+436	54	00941	Flavonoid biosynthesis
+437	54	00942	Anthocyanin biosynthesis
+438	54	00943	Isoflavonoid biosynthesis
+439	54	00944	Flavone and flavonol biosynthesis
+440	54	00945	Stilbenoid, diarylheptanoid and gingerol biosynthesis
+441	54	00332	Carbapenem biosynthesis
+442	54	00331	Clavulanic acid biosynthesis
+443	54	00311	Penicillin and cephalosporin biosynthesis
+444	54	00232	Caffeine metabolism
+445	54	00231	Puromycin biosynthesis
+446	54	00950	Isoquinoline alkaloid biosynthesis
+447	54	00401	Novobiocin biosynthesis
+448	54	00254	Aflatoxin biosynthesis
+449	54	00403	Indole diterpene alkaloid biosynthesis
+450	54	00402	Benzoxazinoid biosynthesis
+451	54	00524	Butirosin and neomycin biosynthesis
+452	54	01058	Acridone alkaloid biosynthesis
+453	54	00521	Streptomycin biosynthesis
+454	55	00620	Pyruvate metabolism
+455	55	00630	Glyoxylate and dicarboxylate metabolism
+456	55	00660	C5-Branched dibasic acid metabolism
+457	55	00640	Propanoate metabolism
+458	55	00562	Inositol phosphate metabolism
+459	55	00650	Butanoate metabolism
+460	55	00500	Starch and sucrose metabolism
+461	55	00520	Amino sugar and nucleotide sugar metabolism
+462	55	00020	Citrate cycle (TCA cycle)
+463	55	00010	Glycolysis / Gluconeogenesis
+464	55	00053	Ascorbate and aldarate metabolism
+465	55	00052	Galactose metabolism
+466	55	00040	Pentose and glucuronate interconversions
+467	55	00051	Fructose and mannose metabolism
+468	55	00030	Pentose phosphate pathway
