@@ -5,12 +5,13 @@ from os.path import expanduser
 from AnendbFileSystem import *
 from pkg_resources import get_distribution
 import re
+import sys
 
 
 # TODO: tests
 class Config:
     """
-    Loads, check consistency and offer configuration parameters from the keggreader.conf file.
+    Loads, check consistency and offer configuration parameters from the keggimporter.conf file.
     """
 
     conf = None
@@ -22,12 +23,12 @@ class Config:
 
         self.afs = AnendbFileSystem()
 
-        self.expectedConfigs = { 'files': [ 'genome', 'enzyme', 'pathway', 'ec', 'nodes', 'names' ], 'directories': [ 'pep', 'pathway', 'gene_maps' ] }
+        self.expectedConfigs = { 'files': [ 'empty' ], 'directories': [ 'inserts' ] }
 
 
     def loadConfiguration( self ):
         """
-        Load the configurations from the keggreader.conf file.
+        Load the configurations from the keggimporter.conf file.
         """
 
         self.conf = configparser.ConfigParser()
@@ -35,11 +36,12 @@ class Config:
         if not self.getConfigurationFile():
             myPlace = expanduser("~")
 
-            confFile = myPlace + '/.keggreader.conf' 
+            confFile = myPlace + '/.keggimporter.conf' 
 
             self.setConfigurationFile( confFile )
         else:
             confFile = self.getConfigurationFile()
+
 
         # Actual read the configurations.
         self.conf.read( confFile )
@@ -52,10 +54,10 @@ class Config:
 
     def setConfigurationFile( self, conf_file=None ):
         """
-        Set the current keggreader.conf file.
+        Set the current keggimporter.conf file.
 
         Args:
-            conf_file(str): Full path for the keggreader.conf
+            conf_file(str): Full path for the keggimporter.conf
         
         """
 
@@ -88,7 +90,7 @@ class Config:
         """
         pkgData = {}
 
-        pkgInfo = get_distribution('keggreader').get_metadata('PKG-INFO')
+        pkgInfo = get_distribution('keggimporter').get_metadata('PKG-INFO')
 
         rawData = pkgInfo.split("\n")
         rawData.pop()
@@ -109,7 +111,7 @@ class Config:
         """
         Check if the configuration file exists.
 
-        If not, print error message because KeggReader depends on at least one keggreader.conf file.
+        If not, print error message because KeggReader depends on at least one keggimporter.conf file.
 
         Args:
             conf_file(str): Full path for the configuration file.
@@ -124,8 +126,8 @@ class Config:
             print( "\n\n" )
             print( '------------------------------------------------------------------------------' )
             print( 'ERROR: Configuration file not found: ' + conf_file )
-            print( 'Take a look at the documentation to know how to create keggreader.conf file.' )
-            print( 'NOTHING, NONE, WILL WORK WITHOUT keggreader.conf file.' )
+            print( 'Take a look at the documentation to know how to create keggimporter.conf file.' )
+            print( 'NOTHING, NONE, WILL WORK WITHOUT keggimporter.conf file.' )
 
             pkgData = self.getPackageInfo()
 
@@ -380,7 +382,7 @@ class Config:
 
         print( '------------------------------------------------------------------------------' )
         print( "--- ERROR ---" )
-        print( "Please, create a proper .keggreader.conf file, with all the required sections, ")
+        print( "Please, create a proper .keggimporter.conf file, with all the required sections, ")
         print( "all the required options and with valid files and directories.")
         print( "\n")
         print( "--- What is wrong in your file ---" )

@@ -9,3 +9,4 @@ docs
 *.tar
 *.tar.bz2
 *.gz
+*.psql

@@ -15,6 +15,7 @@ class ImporterPathway:
 
         self.pathwayNamePrimaryKey = 0
         self.pathwayNamesInserted  = {}
+        self.pathwayMapsInserted   = {}
 
 
     def startImporter( self ):
@@ -203,6 +204,7 @@ class ImporterPathway:
         pathway_names_file.write( str(nextId) + '\t' + str( pathway_class_id ) + '\t' + str(pathway_map) + '\t' + str(pathway_name) + "\n" )
 
         self.pathwayNamesInserted[ str( pathway_name ) ] = nextId 
+        self.pathwayMapsInserted[ str( pathway_map ) ] = nextId
 
 
     def writePathways( self ):
