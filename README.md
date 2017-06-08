@@ -1,4 +1,4 @@
-A data importer from KeggReader module results to PostgreSQL relational database.
+Import results from KeggReader module to PostgreSQL relational database.
 
-Relational database schema is very specific and can be found in this repository.
+Relational database schema is very specific and can be found in the 'sql' directory in this repository.
 
