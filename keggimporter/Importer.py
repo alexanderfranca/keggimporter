@@ -11,16 +11,7 @@ class Importer:
 
     def __init__( self ):
 
-        self.proteinEcsPrimaryKey         = 0 
-        self.proteinMapsPrimaryKey        = 0
-        self.organismEcsPrimaryKey        = 0
-        self.organismMapsPrimaryKey       = 0
-        self.taxonomyPrimaryKey           = 0
-        self.proteinPrimaryKey            = 0
-        self.accessionPrimaryKey          = 0
-        self.proteinAccessionPrimaryKey   = 0
-
-        self.organismTaxonomiesPrimaryKey = 0
+        self.primaryKeys = {}
 
         self.accessionsInserted     = {}
         self.proteinsInserted       = {}
@@ -73,7 +64,7 @@ class Importer:
         self.conf = self.config.getConfigurations()
 
 
-    def openProteinsFile( self ):
+    def openInsertFile( self, file_name=None ):
         """
         Opens the file where to store database inserts instructions.
 
@@ -84,7 +75,7 @@ class Importer:
 
         destinationDirectory = self.getConfiguration( 'directories', 'inserts' ) 
 
-        fileName = 'proteinsInsert.psql'
+        fileName = file_name 
 
         filePath = destinationDirectory + '/' + fileName
 
@@ -96,422 +87,31 @@ class Importer:
         return fileHandle
 
 
-    def openAccessionsFile( self ):
-        """
-        Opens the file where to store database inserts instructions.
+    def nextPrimaryKey( self, table_key=None ):
 
-        Returns:
-            (file): File handle to be written.
+        if not table_key in self.primaryKeys:
+            self.primaryKeys[ table_key ] = 0
 
-        """
 
-        destinationDirectory = self.getConfiguration( 'directories', 'inserts' ) 
+        self.primaryKeys[ table_key ] += 1
 
-        fileName = 'accessionsInsert.psql'
+        return self.primaryKeys[ table_key ]
 
-        filePath = destinationDirectory + '/' + fileName
 
-        if self.afs.fileExists( filePath ):
-            fileHandle = self.afs.purgeAndCreateFile( filePath )
-        else:
-            fileHandle = self.afs.openFileForAppend( filePath )
+    def writeFile( self, file_handle=None, table_name=None, data=None ):
 
-        return fileHandle
+        nextId = self.nextPrimaryKey( table_name )
 
+        values = '\t'.join( data )
 
-    def openProteinAccessionsFile( self ):
-        """
-        Opens the file where to store database inserts instructions.
+        insert = str(nextId) + '\t' + str(values) + "\n"
 
-        Returns:
-            (file): File handle to be written.
+        file_handle.write( insert )
 
-        """
-
-        destinationDirectory = self.getConfiguration( 'directories', 'inserts' ) 
-
-        fileName = 'proteinAccessionsInsert.psql'
-
-        filePath = destinationDirectory + '/' + fileName
-
-        if self.afs.fileExists( filePath ):
-            fileHandle = self.afs.purgeAndCreateFile( filePath )
-        else:
-            fileHandle = self.afs.openFileForAppend( filePath )
-
-        return fileHandle
-
-
-    def openProteinEcsFile( self ):
-        """
-        Opens the file where to store database inserts instructions.
-
-        Returns:
-            (file): File handle to be written.
-
-        """
-
-        destinationDirectory = self.getConfiguration( 'directories', 'inserts' ) 
-
-        fileName = 'proteinEcsInsert.psql'
-
-        filePath = destinationDirectory + '/' + fileName
-
-        if self.afs.fileExists( filePath ):
-            fileHandle = self.afs.purgeAndCreateFile( filePath )
-        else:
-            fileHandle = self.afs.openFileForAppend( filePath )
-
-        return fileHandle
-
-
-    def openProteinMapsFile( self ):
-        """
-        Opens the file where to store database inserts instructions.
-
-        Returns:
-            (file): File handle to be written.
-
-        """
-
-        destinationDirectory = self.getConfiguration( 'directories', 'inserts' ) 
-
-        fileName = 'proteinMapsInsert.psql'
-
-        filePath = destinationDirectory + '/' + fileName
-
-        if self.afs.fileExists( filePath ):
-            fileHandle = self.afs.purgeAndCreateFile( filePath )
-        else:
-            fileHandle = self.afs.openFileForAppend( filePath )
-
-        return fileHandle
-
-
-    def openOrganismEcsFile( self ):
-        """
-        Opens the file where to store database inserts instructions.
-
-        Returns:
-            (file): File handle to be written.
-
-        """
-
-        destinationDirectory = self.getConfiguration( 'directories', 'inserts' ) 
-
-        fileName = 'organismEcsInsert.psql'
-
-        filePath = destinationDirectory + '/' + fileName
-
-        if self.afs.fileExists( filePath ):
-            fileHandle = self.afs.purgeAndCreateFile( filePath )
-        else:
-            fileHandle = self.afs.openFileForAppend( filePath )
-
-        return fileHandle
-
-
-    def openOrganismMapsFile( self ):
-        """
-        Opens the file where to store database inserts instructions.
-
-        Returns:
-            (file): File handle to be written.
-
-        """
-
-        destinationDirectory = self.getConfiguration( 'directories', 'inserts' ) 
-
-        fileName = 'organismMapsInsert.psql'
-
-        filePath = destinationDirectory + '/' + fileName
-
-        if self.afs.fileExists( filePath ):
-            fileHandle = self.afs.purgeAndCreateFile( filePath )
-        else:
-            fileHandle = self.afs.openFileForAppend( filePath )
-
-        return fileHandle
-
-
-    def openTaxonomiesFile( self ):
-        """
-        Opens the file where to store database inserts instructions.
-
-        Returns:
-            (file): File handle to be written.
-
-        """
-
-        destinationDirectory = self.getConfiguration( 'directories', 'inserts' ) 
-
-        fileName = 'taxonomiesInsert.psql'
-
-        filePath = destinationDirectory + '/' + fileName
-
-        if self.afs.fileExists( filePath ):
-            fileHandle = self.afs.purgeAndCreateFile( filePath )
-        else:
-            fileHandle = self.afs.openFileForAppend( filePath )
-
-        return fileHandle
-
-
-    def openOrganismTaxonomiesFile( self ):
-        """
-        Opens the file where to store database inserts instructions.
-
-        Returns:
-            (file): File handle to be written.
-
-        """
-
-        destinationDirectory = self.getConfiguration( 'directories', 'inserts' ) 
-
-        fileName = 'organismTaxonomiesInsert.psql'
-
-        filePath = destinationDirectory + '/' + fileName
-
-        if self.afs.fileExists( filePath ):
-            fileHandle = self.afs.purgeAndCreateFile( filePath )
-        else:
-            fileHandle = self.afs.openFileForAppend( filePath )
-
-        return fileHandle
-
-
-    def nextProteinPrimaryKey( self ):
-        """
-        Controls the proteins table primary key counter.
-
-        Returns:
-            (int): An integer representing the new primary key.
-
-        """
-
-        self.proteinPrimaryKey += 1
-
-        return self.proteinPrimaryKey
-
-
-    def nextTaxonomyPrimaryKey( self ):
-        """
-        Controls the proteins table primary key counter.
-
-        Returns:
-            (int): An integer representing the new primary key.
-
-        """
-
-        self.taxonomyPrimaryKey += 1
-
-        return self.taxonomyPrimaryKey
-
-
-    def nextAccessionPrimaryKey( self ):
-        """
-        Controls the proteins table primary key counter.
-
-        Returns:
-            (int): An integer representing the new primary key.
-
-        """
-
-        self.accessionPrimaryKey += 1
-
-        return self.accessionPrimaryKey
-
-
-    def nextProteinAccessionPrimaryKey( self ):
-        """
-        Controls the proteins table primary key counter.
-
-        Returns:
-            (int): An integer representing the new primary key.
-
-        """
-
-        self.proteinAccessionPrimaryKey += 1
-
-        return self.proteinAccessionPrimaryKey
-
-
-
-    def nextProteinEcsPrimaryKey( self ):
-        """
-        Controls the proteins table primary key counter.
-
-        Returns:
-            (int): An integer representing the new primary key.
-
-        """
-
-        self.proteinEcsPrimaryKey += 1
-
-        return self.proteinEcsPrimaryKey
-
-
-    def nextProteinMapsPrimaryKey( self ):
-        """
-        Controls the proteins table primary key counter.
-
-        Returns:
-            (int): An integer representing the new primary key.
-
-        """
-
-        self.proteinMapsPrimaryKey += 1
-
-        return self.proteinMapsPrimaryKey
-
-
-    def nextOrganismEcsPrimaryKey( self ):
-        """
-        Controls the proteins table primary key counter.
-
-        Returns:
-            (int): An integer representing the new primary key.
-
-        """
-
-        self.organismEcsPrimaryKey += 1
-
-        return self.organismEcsPrimaryKey
-
-
-    def nextOrganismMapsPrimaryKey( self ):
-        """
-        Controls the proteins table primary key counter.
-
-        Returns:
-            (int): An integer representing the new primary key.
-
-        """
-
-        self.organismMapsPrimaryKey += 1
-
-        return self.organismMapsPrimaryKey
-
-
-    def nextOrganismTaxonomiesPrimaryKey( self ):
-        """
-        Controls the proteins table primary key counter.
-
-        Returns:
-            (int): An integer representing the new primary key.
-
-        """
-
-        self.organismTaxonomiesPrimaryKey += 1
-
-        return self.organismTaxonomiesPrimaryKey
-
-
-
-    def writeProteinsFile( self, protein_file=None, identification=None, full_fasta_header=None, description=None, organism_id=None, sequence=None ):
-        """
-        Actual write the proteins inserts file, log the operation and keep the inserted ids.
-        """
-
-        nextId = self.nextProteinPrimaryKey()
-
-        protein_file.write( str(nextId) + '\t' + str(identification) + '\t' + str(full_fasta_header) + '\t' + str(description) + '\t' + str(organism_id) + '\t' + str(sequence) + "\n" )
-
-        self.proteinsInserted[ str(identification ) ] = nextId 
-        
-
-    def writeAccessionsFile( self, accession_file=None, accession=None ):
-        """
-        Actual write the proteins inserts file, log the operation and keep the inserted ids.
-        """
-
-        nextId = self.nextAccessionPrimaryKey()
-
-        accession_file.write( str(nextId) + '\t' + str(accession) + "\n" )
-
-        self.accessionsInserted[ str(accession) ] = nextId 
- 
-
-    def writeProteinAccessionsFile( self, accession_file=None, protein_id=None, accession_id=None ):
-        """
-        Actual write the proteins inserts file, log the operation and keep the inserted ids.
-        """
-
-        nextId = self.nextProteinAccessionPrimaryKey()
-
-        accession_file.write( str(nextId) + '\t' + str(protein_id) + '\t' + str(accession_id) + "\n" )
-
-
-
-    def writeProteinEcsFile( self, protein_ecs_file=None, protein_id=None, ec_id=None ):
-        """
-        Actual write the protein_ecs inserts file, log the operation and keep the inserted ids.
-        """
-
-        nextId = self.nextProteinEcsPrimaryKey()
-
-        protein_ecs_file.write( str(nextId) + '\t' + str(protein_id) + '\t' + str(ec_id) + "\n" )
-
-        #self.proteinEcsInserted[ str(identification ) ] = nextId 
-        
-
-    def writeProteinMapsFile( self, protein_maps_file=None, protein_id=None, map_id=None ):
-        """
-        Actual write the protein_maps inserts file, log the operation and keep the inserted ids.
-        """
-
-        nextId = self.nextProteinMapsPrimaryKey()
-
-        protein_maps_file.write( str(nextId) + '\t' + str(protein_id) + '\t' + str(map_id) + "\n" )
-
-        #self.proteinEcsInserted[ str(identification ) ] = nextId 
-
-
-    def writeOrganismEcsFile( self, organism_ecs_file=None, organism_id=None, ec_id=None ):
-        """
-        Actual write the organism_ecs inserts file, log the operation and keep the inserted ids.
-        """
-
-        nextId = self.nextOrganismEcsPrimaryKey()
-
-        organism_ecs_file.write( str(nextId) + '\t' + str(organism_id) + '\t' + str(ec_id) + "\n" )
-
-        #self.proteinEcsInserted[ str(identification ) ] = nextId 
-
-
-    def writeOrganismMapsFile( self, organism_maps_file=None, organism_id=None, map_id=None ):
-        """
-        Actual write the organism_ecs inserts file, log the operation and keep the inserted ids.
-        """
-
-        nextId = self.nextOrganismMapsPrimaryKey()
-
-        organism_maps_file.write( str(nextId) + '\t' + str(organism_id) + '\t' + str(map_id) + "\n" )
-
-        #self.proteinEcsInserted[ str(identification ) ] = nextId 
- 
-
-    def writeTaxonomiesFile( self, taxonomy_file=None, taxonomy=None, tax_id=None, tax_type=None ):
-        """
-        Actual write the taxonomies inserts file, log the operation and keep the inserted ids.
-        """
-
-        nextId = self.nextTaxonomyPrimaryKey()
-
-        taxonomy_file.write( str(nextId) + '\t' + str(taxonomy) + '\t' + str(tax_id) + '\t' + str(tax_type) + "\n" )
-
-        self.taxonomiesInserted[ str(taxonomy) ] = nextId 
-
-
-    def writeOrganismTaxonomiesFile( self, organism_taxonomies_file=None, organism_id=None, taxonomy_id=None ):
-        """
-        Actual write the organism_taxonomies inserts file, log the operation and keep the inserted ids.
-        """
-
-        nextId = self.nextOrganismTaxonomiesPrimaryKey()
-        
-        organism_taxonomies_file.write( str(nextId) + '\t' + str(organism_id) + '\t' + str(taxonomy_id) + "\n" )
-
+        # DON'T MESS WITH THAT!!!!! YOU'RE WARNED!!!
+        # Messing with this cute id will kill your importer because the table relationships generation files relies on that!!!
+        # Take a look on the lines like 'taxonomiesInserted' or 'proteinsInserted'.
+        return nextId
 
 
     # TODO: test, comments
@@ -534,7 +134,7 @@ class Importer:
 
         taxonomies = {} 
 
-        taxonomyFile = self.openTaxonomiesFile()
+        taxonomyFile = self.openInsertFile( 'taxonomiesInsert.psql' )
 
         for organism,taxonomyData in organisms.iteritems():
             for tax in taxonomyData['lineage']:
@@ -543,7 +143,9 @@ class Importer:
 
 
         for taxonomy,taxData in taxonomies.iteritems():
-            self.writeTaxonomiesFile( taxonomyFile, taxData['name'], taxData['tax_id'], taxData['type'] )
+            #taxonomyInserted = self.writeTaxonomiesFile( taxonomyFile, taxData['name'], taxData['tax_id'], taxData['type'] )
+            taxonomyInserted = self.writeFile( taxonomyFile, 'taxonomies', [ str(taxData['name']), str(taxData['tax_id']), str(taxData['type']) ] )
+            self.taxonomiesInserted[ taxData['name'] ] = taxonomyInserted
 
 
 
@@ -553,7 +155,7 @@ class Importer:
 
         taxonomies = {} 
 
-        taxonomyFile = self.openOrganismTaxonomiesFile()
+        taxonomyFile = self.openInsertFile( 'organismTaxonomiesInsert.psql' )
 
         for organism,taxonomyData in organisms.iteritems():
             for tax in taxonomyData['lineage']:
@@ -561,17 +163,38 @@ class Importer:
                 taxId = self.taxonomiesInserted[ tax['name'] ] 
                 organismId = self.importerOrganism.organismsInserted[ organism ] 
 
-                self.writeOrganismTaxonomiesFile( taxonomyFile, taxId, organismId )
+                #self.writeOrganismTaxonomiesFile( taxonomyFile, organismId, taxId )
+                self.writeFile( taxonomyFile, 'organism_taxonomies', [ str(organismId), str(taxId) ] )
            
+
+    def writeEcMaps( self ):
+
+        ecMapsFile = self.openInsertFile( 'ecMapsInsert.psql' )
+
+        ecMaps = self.reader.getEcMaps()
+
+        for ec,mapNumbers in ecMaps.iteritems():
+            ecId = self.importerEc.ecsInserted[ ec ]
+            
+            for mapNumber in mapNumbers:
+
+                if mapNumber in self.importerPathway.pathwayMapsInserted:
+
+                    mapId = self.importerPathway.pathwayMapsInserted[ mapNumber ]
+
+                    #self.writeEcMapsFile( ecMapsFile, ecId, mapId )
+                    self.writeFile( ecMapsFile, 'ec_maps', [ str(ecId), str(mapId) ] )
 
 
     def writeProteinAccessions( self ):
 
-        proteinAccessionFile = self.openProteinAccessionsFile()
+        proteinAccessionFile = self.openInsertFile( 'proteinAccessionsInsert.psql')
 
         for proteinIdentification, proteinIdRelationalDatabase in self.proteinsInserted.iteritems():
             accessionId = self.accessionsInserted[ proteinIdentification ]
-            self.writeProteinAccessionsFile( proteinAccessionFile, proteinIdRelationalDatabase, accessionId )
+            #self.writeProteinAccessionsFile( proteinAccessionFile, proteinIdRelationalDatabase, accessionId )
+            self.writeFile( proteinAccessionFile, 'protein_accessions', [ str(proteinIdRelationalDatabase), str(accessionId) ] )
+
  
     # TODO: test, comments
     def writeOrganisms( self ): 
@@ -586,10 +209,10 @@ class Importer:
         organismMaps = self.reader.getAllOrganismMaps()
 
         # Open protein_ecs insert file.
-        organismEcFile = self.openOrganismEcsFile()
+        organismEcFile = self.openInsertFile( 'organismEcsInsert.psql' )
 
         # Open organism_maps insert file.
-        organismMapFile = self.openOrganismMapsFile()
+        organismMapFile = self.openInsertFile( 'organismMapsInsert.psql' )
 
 
         # Now we have to write organism_ecs table.
@@ -606,7 +229,8 @@ class Importer:
                 for ec in organismEcs[ organism ]:
                     ecId = self.importerEc.ecsInserted[ ec ]
 
-                    self.writeOrganismEcsFile( organismEcFile, organismId , ecId )
+                    #self.writeOrganismEcsFile( organismEcFile, organismId , ecId )
+                    self.writeFile( organismEcFile, 'organism_ecs', [ str(organismId) , str(ecId) ] )
 
             if len( organismMaps[ organism ] ) > 0:
                 
@@ -616,7 +240,8 @@ class Importer:
                     if mapNumber in self.importerPathway.pathwayMapsInserted:
                         mapId = self.importerPathway.pathwayMapsInserted[ mapNumber ]
 
-                        self.writeOrganismMapsFile( organismMapFile, organismId , mapId )
+                        #self.writeOrganismMapsFile( organismMapFile, organismId , mapId )
+                        self.writeFile( organismMapFile, 'organism_maps', [ str(organismId) , str(mapId) ] )
 
 
     def writeProteins( self ):
@@ -624,8 +249,8 @@ class Importer:
         Write the proteins insert file.
         """
 
-        proteinsDestination = self.openProteinsFile()
-        accessionsDestination = self.openAccessionsFile()
+        proteinsDestination = self.openInsertFile( 'proteinsInsert.psql' )
+        accessionsDestination = self.openInsertFile( 'accessionsInsert.psql' )
 
         proteins = {}
 
@@ -640,12 +265,16 @@ class Importer:
 
                 entry = self.reader.getPepParsedEntry( position )
 
-                #pprint.pprint( entry.organism.code )
-
                 organismId = self.importerOrganism.organismsInserted[ entry.organism.code ]
 
-                self.writeProteinsFile( proteinsDestination, entry.identification, entry.fullFastaHeader, entry.description, organismId, entry.sequence  )
-                self.writeAccessionsFile( accessionsDestination, entry.identification  )
+                #self.writeProteinsFile( proteinsDestination, entry.identification, entry.fullFastaHeader, entry.description, organismId, entry.sequence  )
+                proteinInserted = self.writeFile( proteinsDestination, 'proteins', [ str(entry.identification), str(entry.fullFastaHeader), str(entry.description), str(organismId), str(entry.sequence) ] )
+                self.proteinsInserted[ entry.identification ] = proteinInserted
+
+                accessionInserted = self.writeFile( accessionsDestination, 'accessions', [ str(entry.identification) ]  )
+                self.accessionsInserted[ entry.identification ] = accessionInserted 
+                #self.writeAccessionsFile( accessionsDestination, entry.identification  )
+
 
 
 
@@ -668,10 +297,10 @@ class Importer:
         proteinMaps = self.reader.getAllProteinMaps()
 
         # Open protein_ecs insert file.
-        proteinEcFile = self.openProteinEcsFile()
+        proteinEcFile = self.openInsertFile( 'proteinEcsInsert.psql' )
 
         # Open protein_maps insert file.
-        proteinMapFile = self.openProteinMapsFile()
+        proteinMapFile = self.openInsertFile( 'proteinMapsInsert.psql' )
 
 
         # Now we have to write protein_ecs table.
@@ -693,7 +322,8 @@ class Importer:
                     proteinId = relationalDatabaseId
 
                     # Actual write protein_ecs file.
-                    self.writeProteinEcsFile( proteinEcFile, proteinId, ecId )
+                    #self.writeProteinEcsFile( proteinEcFile, proteinId, ecId )
+                    self.writeFile( proteinEcFile, 'protein_ecs', [ str(proteinId), str(ecId) ] )
 
 
             # Maps to specific protein.
@@ -709,7 +339,8 @@ class Importer:
                             mapId     = self.importerPathway.pathwayMapsInserted[ proteinMap ]
                             proteinId = relationalDatabaseId
 
-                            self.writeProteinMapsFile( proteinMapFile, proteinId, mapId )
+                            #self.writeProteinMapsFile( proteinMapFile, proteinId, mapId )
+                            self.writeFile( proteinMapFile, 'protein_maps', [ str(proteinId), str(mapId) ] )
 
 
 

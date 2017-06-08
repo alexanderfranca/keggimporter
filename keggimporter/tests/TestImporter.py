@@ -44,7 +44,7 @@ class TestImporter( unittest.TestCase ):
 
         self.imp.importerOrganism.startImporter() 
         confFile = './fixtures/keggimporter.conf'
-        self.imp.importerEc.setConfigurationFile( confFile )
+        self.imp.importerOrganism.setConfigurationFile( confFile )
 
         self.imp.startImporter() 
         confFile = './fixtures/keggimporter.conf'
@@ -59,6 +59,7 @@ class TestImporter( unittest.TestCase ):
         self.imp.writeProteinRelations()
         self.imp.writeOrganismTaxonomies()
         self.imp.writeProteinAccessions()
+        self.imp.writeEcMaps()
 
 
 

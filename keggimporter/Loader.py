@@ -6,33 +6,17 @@ from ImporterEc import *
 from ImporterPathway import *
 from ImporterOrganism import *
 import sys
+import subprocess
+from time import sleep
 
 class Importer:
 
     def __init__( self ):
 
-        self.proteinEcsPrimaryKey         = 0 
-        self.proteinMapsPrimaryKey        = 0
-        self.organismEcsPrimaryKey        = 0
-        self.organismMapsPrimaryKey       = 0
-        self.taxonomyPrimaryKey           = 0
-        self.proteinPrimaryKey            = 0
-        self.accessionPrimaryKey          = 0
-        self.organismTaxonomiesPrimaryKey = 0
+        self.files = None
 
-        self.accessionsInserted     = {}
-        self.proteinsInserted       = {}
-        self.taxonomiesInserted     = {}
+    def start( self ):
 
-        self.importerPathway  = ImporterPathway()
-        self.importerEc       = ImporterEc()
-        self.importerOrganism = ImporterOrganism()
-        self.reader           = KeggReader()
-
-
-    def startImporter( self ):
-
-        self.reader = KeggReader()
         self.config = Config()
         self.afs    = AnendbFileSystem()
 
@@ -73,28 +57,40 @@ class Importer:
 
     def loadFiles( self ):
 
+        dataSource = self.getConfiguration( 'directories', 'inserts' )
+        username   = self.getConfiguration( 'database', 'user' )
 
-        filesToRun = [
+        self.files = [
+                    { 'file': 'ecsInsert.psql',                 'table': 'ecs', 'columns': [ 'id', 'ec' ] },
+                    { 'file': 'organismsInsert.psql',           'table': 'organisms', 'columns': [ 'id', 'code', 'name', 'internal_id', 'taxonomy_id' ] },
+                    { 'file': 'pathwaySuperClassesInsert.psql', 'table': 'pathway_super_classes', 'columns': [ 'id', 'name' ] },
+                    { 'file': 'pathwayClassesInsert.psql',      'table': 'pathway_classes', 'columns': [ 'id', 'super_class_id', 'name' ] },
+                    { 'file': 'pathwayNamesInsert.psql',        'table': 'pathway_maps', 'columns': [ 'id', 'class_id', 'identification', 'name' ] } ,
+                    { 'file': 'taxonomiesInsert.psql',          'table': 'taxonomies', 'columns': [ 'id', 'taxonomy', 'tax_id', 'tax_type' ] },
+                    { 'file': 'organismTaxonomiesInsert.psql',  'table': 'organism_taxonomies', 'columns': [ 'id', 'organism_id', 'taxonomy_id' ] },
+                    { 'file': 'proteinsInsert.psql',            'table': 'proteins', 'columns': [ 'id', 'identification', 'full_fasta_header', 'description', 'organism_id', 'sequence' ] },
+                    { 'file': 'proteinEcsInsert.psql',          'table': 'protein_ecs', 'columns': [ 'id', 'protein_id', 'ec_id' ] },
+                    { 'file': 'proteinMapsInsert.psql',         'table': 'protein_maps', 'columns': [ 'id', 'protein_id', 'map_id' ] },
+                    { 'file': 'organismEcsInsert.psql',         'table': 'organism_ecs', 'columns': [ 'id', 'organism_id', 'ec_id' ] },
+                    { 'file': 'organismMapsInsert.psql',        'table': 'organism_maps', 'columns': [ 'id', 'organism_id', 'map_id' ] },
+                    { 'file': 'accessionsInsert.psql',          'table': 'accessions', 'columns': [ 'id', 'accession' ] },
+                    { 'file': 'proteinAccessionsInsert.psql',   'table': 'protein_accessions', 'columns': [ 'id', 'protein_id', 'accession_id' ] },
+                    { 'file': 'ecMapsInsert.psql',              'table': 'ec_maps', 'columns': [ 'id', 'ec_id', 'map_id' ] },
+                 ]
 
-         { 'file': 'ecsInsert.psql',                 'columns': [ 'id', 'ec' ] },
-         { 'file': 'organismsInsert.psql',           'columns': [ 'id', 'organism_code', 'organism_kegg_name', 'organism_internal_kegg_id', 'taxonomy_id' ] },
-         { 'file': 'pathwaySuperClassesInsert.psql', 'columns': [ 'id', 'name' ] },
-         { 'file': 'pathwayClassesInsert.psql',      'columns': [ 'id', 'super_class_id', 'name' ] },
-         { 'file': 'pathwayNamesInsert.psql',        'columns': [ 'id', 'class_id', 'map_number', 'name' ] } ,
-         { 'file': 'taxonomiesInsert.psql',          'columns': [ 'id', 'taxonomy', 'tax_id', 'tax_type' ] },
-         { 'file': 'organismTaxonomiesInsert.psql',  'columns': [ 'id', 'organism_id', 'taxonomy_id' ] },
-         { 'file': 'proteinsInsert.psql',            'columns': [ 'id', 'identification', 'full_fasta_header', 'description', 'organism_id', 'sequence' ] },
-         { 'file': 'proteinEcsInsert.psql',          'columns': [ 'id', 'protein_id', 'ec_id' ] },
-         { 'file': 'proteinMapsInsert.psql',         'columns': [ 'id', 'protein_id', 'map_id' ] },,
-         { 'file': 'organismEcsInsert.psql',         'columns': [ 'id', 'organism_id', 'ec_id' ] },
-         { 'file': 'organismMapsInsert.psql',        'columns': [ 'id', 'organism_id', 'map_id' ] },
-         { 'file': 'accessionsInsert.psql',          'columns': [ 'id', 'accession' ] },
-         { 'file': 'proteinAccessionsInsert.psql',   'columns': [ 'id', 'protein_id', 'accession_id' ] },
+        # Load each table into relational database.
+        for loadFile in self.files:
 
-    ]
-#subprocess.Popen('psql ' + args.database_name + ' -U ' + args.database_name + " -c 'create index on genome_comparison_clusters(protein_ids);'", shell=True)
-#subprocess.Popen('psql ' + args.database_name + ' -U ' + args.database_name + " -c 'create index on genome_comparison_clusters(genome_comparison_id);'", shell=True)
+            pprint.pprint( '-----------------------------------------------' )
+            pprint.pprint( loadFile['file'] )
+            pprint.pprint( '-----------------------------------------------' )
+            print( "\n" )
+            fileToLoad = dataSource + '/' + loadFile['file'] 
+            table = loadFile['table']
+            columns = ','.join( loadFile['columns'] )
 
+            subprocess.Popen( "psql -U " + username + " -c \"\copy " + table + "(" + columns + ") from \'" + fileToLoad + "\';\"", shell=True )
+            sleep( 2 )
 
 
 
