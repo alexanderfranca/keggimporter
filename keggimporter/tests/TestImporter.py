@@ -58,6 +58,7 @@ class TestImporter( unittest.TestCase ):
         self.imp.writeProteins()
         self.imp.writeProteinRelations()
         self.imp.writeOrganismTaxonomies()
+        self.imp.writeProteinAccessions()
 
 
 

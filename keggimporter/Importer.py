@@ -18,6 +18,8 @@ class Importer:
         self.taxonomyPrimaryKey           = 0
         self.proteinPrimaryKey            = 0
         self.accessionPrimaryKey          = 0
+        self.proteinAccessionPrimaryKey   = 0
+
         self.organismTaxonomiesPrimaryKey = 0
 
         self.accessionsInserted     = {}
@@ -117,6 +119,27 @@ class Importer:
         return fileHandle
 
 
+    def openProteinAccessionsFile( self ):
+        """
+        Opens the file where to store database inserts instructions.
+
+        Returns:
+            (file): File handle to be written.
+
+        """
+
+        destinationDirectory = self.getConfiguration( 'directories', 'inserts' ) 
+
+        fileName = 'proteinAccessionsInsert.psql'
+
+        filePath = destinationDirectory + '/' + fileName
+
+        if self.afs.fileExists( filePath ):
+            fileHandle = self.afs.purgeAndCreateFile( filePath )
+        else:
+            fileHandle = self.afs.openFileForAppend( filePath )
+
+        return fileHandle
 
 
     def openProteinEcsFile( self ):
@@ -299,6 +322,21 @@ class Importer:
         return self.accessionPrimaryKey
 
 
+    def nextProteinAccessionPrimaryKey( self ):
+        """
+        Controls the proteins table primary key counter.
+
+        Returns:
+            (int): An integer representing the new primary key.
+
+        """
+
+        self.proteinAccessionPrimaryKey += 1
+
+        return self.proteinAccessionPrimaryKey
+
+
+
     def nextProteinEcsPrimaryKey( self ):
         """
         Controls the proteins table primary key counter.
@@ -393,6 +431,16 @@ class Importer:
 
         self.accessionsInserted[ str(accession) ] = nextId 
  
+
+    def writeProteinAccessionsFile( self, accession_file=None, protein_id=None, accession_id=None ):
+        """
+        Actual write the proteins inserts file, log the operation and keep the inserted ids.
+        """
+
+        nextId = self.nextProteinAccessionPrimaryKey()
+
+        accession_file.write( str(nextId) + '\t' + str(protein_id) + '\t' + str(accession_id) + "\n" )
+
 
 
     def writeProteinEcsFile( self, protein_ecs_file=None, protein_id=None, ec_id=None ):
@@ -498,6 +546,7 @@ class Importer:
             self.writeTaxonomiesFile( taxonomyFile, taxData['name'], taxData['tax_id'], taxData['type'] )
 
 
+
     def writeOrganismTaxonomies( self ):
 
         organisms = self.reader.getAllOrganisms()
@@ -515,6 +564,14 @@ class Importer:
                 self.writeOrganismTaxonomiesFile( taxonomyFile, taxId, organismId )
            
 
+
+    def writeProteinAccessions( self ):
+
+        proteinAccessionFile = self.openProteinAccessionsFile()
+
+        for proteinIdentification, proteinIdRelationalDatabase in self.proteinsInserted.iteritems():
+            accessionId = self.accessionsInserted[ proteinIdentification ]
+            self.writeProteinAccessionsFile( proteinAccessionFile, proteinIdRelationalDatabase, accessionId )
  
     # TODO: test, comments
     def writeOrganisms( self ): 
