@@ -1,7 +1,6 @@
 import pprint
 from keggreader import *
 from Config import *
-from ImporterProtein import *
 from ImporterEc import *
 from ImporterPathway import *
 from ImporterOrganism import *

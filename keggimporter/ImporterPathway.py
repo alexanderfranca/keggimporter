@@ -3,6 +3,9 @@ from keggreader import *
 from Config import *
 import sys
 
+
+# TODO: Remove code duplication. All the 'open', 'next' and 'write file' methods can be replaced by a single one.
+#       Take a look in the Importer.py class to see how it can be done.
 class ImporterPathway:
 
     def __init__( self ):

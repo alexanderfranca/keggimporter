@@ -111,7 +111,6 @@ class ImporterOrganism:
         organisms = self.reader.getAllOrganisms() 
         
         for organismCode,organismData in organisms.iteritems():
-            #pprint.pprint( organismData )
             self.writeOrganismsFile( organismsDestination,  organismCode, organismData['genome']['kegg_definition_name'], organismData['genome']['kegg_organism_id'], organismData['genome']['taxonomy_id'] )
 
 
