@@ -9,7 +9,7 @@ import re
 class TestLoader( unittest.TestCase ):
 
     def setUp( self ):
-        self.imp = Importer()
+        self.imp = Loader()
 
     def test_start( self ):
 
@@ -26,6 +26,25 @@ class TestLoader( unittest.TestCase ):
 
         self.assertEquals( config, expectedConfig )
 
+    def test_checkPsqlCanExecuteCommand( self ):
+
+        self.imp.start() 
+        confFile = './fixtures/keggimporter.conf'
+        self.imp.setConfigurationFile( confFile )
+
+        result = self.imp.checkPsqlCanExecuteCommand()
+
+        self.assertTrue( result )
+
+    def test_checkYouHaveTheRightTables( self ):
+
+        self.imp.start() 
+        confFile = './fixtures/keggimporter.conf'
+        self.imp.setConfigurationFile( confFile )
+
+        result = self.imp.checkYouHaveTheRightTables()
+
+        self.assertTrue( result )
 
     def test_loadFiles( self ):
 
@@ -34,8 +53,6 @@ class TestLoader( unittest.TestCase ):
         self.imp.setConfigurationFile( confFile )
  
         self.imp.loadFiles()
-
-        #pprint.pprint( self.imp.files )
 
 
 if __name__ == "__main__":

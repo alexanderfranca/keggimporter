@@ -5,6 +5,8 @@ from ImporterEc import *
 from ImporterPathway import *
 from ImporterOrganism import *
 import sys
+import subprocess
+import collections
 
 class Importer:
 
@@ -13,13 +15,13 @@ class Importer:
         self.primaryKeys = {}
 
         self.accessionsInserted     = {}
-        self.proteinsInserted       = {}
+        self.proteinsInserted       = collections.OrderedDict()
         self.taxonomiesInserted     = {}
 
         self.importerPathway  = ImporterPathway()
         self.importerEc       = ImporterEc()
         self.importerOrganism = ImporterOrganism()
-        self.reader           = KeggReader()
+        #self.reader           = KeggReader()
 
 
     def startImporter( self ):
@@ -87,24 +89,49 @@ class Importer:
 
 
     def nextPrimaryKey( self, table_key=None ):
+        """
+        Returns the next primary key id for an specific table.
 
+        Args:
+            table_key(str): Name of the table.
+
+        Returns:
+            (int): The next primary key id.
+
+        """
+
+        # Make sure the dictionary key exists and, if not, create with zero as starting value.
         if not table_key in self.primaryKeys:
             self.primaryKeys[ table_key ] = 0
 
 
+        # Increment the id.
         self.primaryKeys[ table_key ] += 1
 
         return self.primaryKeys[ table_key ]
 
 
     def writeFile( self, file_handle=None, table_name=None, data=None ):
+        """
+        Write the actual insert instructions file.
 
+        Args:
+            file_handle(file): File handle where to write the data.
+            table_name(str): Name of the table. This one is subjective, it means 'table_name' is the key name used by a class dictionary variable to keep tracking of the primary key ids.
+            data(list): List of string to be written in the file.
+
+        """
+
+        # Record the next primary key id.
         nextId = self.nextPrimaryKey( table_name )
 
+        # Generate the string list of data to be written in the file.
         values = '\t'.join( data )
 
+        # Actual put together the primary key id, the string values and the new line character to be writen in the file.
         insert = str(nextId) + '\t' + str(values) + "\n"
 
+        # Write the stuff in the file.
         file_handle.write( insert )
 
         # DON'T MESS WITH THAT!!!!! YOU'RE WARNED!!!
@@ -113,22 +140,33 @@ class Importer:
         return nextId
 
 
-    # TODO: test, comments
     def writePathways( self ): 
+        """
+        Only calls the class ImporterPathway methods to generate its insert instructions file.
+
+        That's crucial because 'writePathways' generates a dictionary containing the primary key ids for pathways tables. 
+        """
 
         # Generate inserts for meabolic pathways.
         self.importerPathway.writePathways()
 
 
-    # TODO: test, comments
     def writeEcs( self ): 
+        """
+        Only calls the class ImporterEc methods to generate its insert instructions file.
+
+        That's crucial because 'writeEcs' generates a dictionary containing the primary key ids for pathways tables. 
+        """
 
         # Generate inserts for ecs table.
         self.importerEc.writeEcs()
 
 
     def writeTaxonomies( self ):
+        """
+        Write the taxonomies insert file.
 
+        """
         organisms = self.reader.getAllOrganisms()
 
         taxonomies = {} 
@@ -142,13 +180,15 @@ class Importer:
 
 
         for taxonomy,taxData in taxonomies.iteritems():
-            #taxonomyInserted = self.writeTaxonomiesFile( taxonomyFile, taxData['name'], taxData['tax_id'], taxData['type'] )
             taxonomyInserted = self.writeFile( taxonomyFile, 'taxonomies', [ str(taxData['name']), str(taxData['tax_id']), str(taxData['type']) ] )
             self.taxonomiesInserted[ taxData['name'] ] = taxonomyInserted
 
 
 
     def writeOrganismTaxonomies( self ):
+        """
+        Write the insert file that relates organisms and its taxonomies.
+        """
 
         organisms = self.reader.getAllOrganisms()
 
@@ -162,11 +202,14 @@ class Importer:
                 taxId = self.taxonomiesInserted[ tax['name'] ] 
                 organismId = self.importerOrganism.organismsInserted[ organism ] 
 
-                #self.writeOrganismTaxonomiesFile( taxonomyFile, organismId, taxId )
                 self.writeFile( taxonomyFile, 'organism_taxonomies', [ str(organismId), str(taxId) ] )
            
 
     def writeEcMaps( self ):
+        """
+        Write the insert file that relates EC numbers and metabolic map numbers.
+
+        """
 
         ecMapsFile = self.openInsertFile( 'ecMapsInsert.psql' )
 
@@ -186,17 +229,24 @@ class Importer:
 
 
     def writeProteinAccessions( self ):
+        """
+        Write insert file for the accessions protein ids.
+
+        """
 
         proteinAccessionFile = self.openInsertFile( 'proteinAccessionsInsert.psql')
 
         for proteinIdentification, proteinIdRelationalDatabase in self.proteinsInserted.iteritems():
             accessionId = self.accessionsInserted[ proteinIdentification ]
-            #self.writeProteinAccessionsFile( proteinAccessionFile, proteinIdRelationalDatabase, accessionId )
             self.writeFile( proteinAccessionFile, 'protein_accessions', [ str(proteinIdRelationalDatabase), str(accessionId) ] )
 
  
-    # TODO: test, comments
+
     def writeOrganisms( self ): 
+        """
+        Write the insert file for the organisms table.
+
+        """
 
         # Generate inserts for meabolic pathways.
         self.importerOrganism.writeOrganisms()
@@ -246,6 +296,7 @@ class Importer:
     def writeProteins( self ):
         """
         Write the proteins insert file.
+
         """
 
         proteinsDestination = self.openInsertFile( 'proteinsInsert.psql' )
@@ -276,21 +327,12 @@ class Importer:
 
 
 
-
-
-
-    # TODO: test, comments
     def writeProteinRelations( self ): 
+        """
+        Write the insert file for some proteins relations like proteins and its EC numbers and proteins and its metabolic map numbers.
 
-#        # Generate inserts for meabolic pathways.
-#        self.importerPathway.writePathways()
-#        
-#        # Generate inserts for proteins table.
-#        self.importerProtein.writeProteins()
-#
-#        # Generate inserts for ecs table.
-#        self.importerEc.writeEcs()
-#
+        """
+
         # Get all protein maps relations.
         # Notice that proteins without any map wont exist in the result below. That's important to save memory (no other reason at all).
         proteinMaps = self.reader.getAllProteinMaps()
@@ -301,7 +343,6 @@ class Importer:
         # Open protein_maps insert file.
         proteinMapFile = self.openInsertFile( 'proteinMapsInsert.psql' )
 
-
         # Now we have to write protein_ecs table.
         # That means get the proteins ids and its related ecs ids.
         # Those ids comes from dictionary variables generated by the 'write' methods for each table.
@@ -310,7 +351,7 @@ class Importer:
 
             # We get all EC numbers related to the specific protein.
             ecs = self.reader.getEcNumberByGene( protein ) 
-        
+
             # If there's EC number (almost of proteins doesn't has a related EC number - which means they're no enzymes).
             if ecs:
 
