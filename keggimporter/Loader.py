@@ -10,9 +10,7 @@ import re
 
 class Loader:
     """
-    This is not a fancy class...
-
-    This class loads the insert data files into the relational database.
+    This class loads the insert instructions data files into the relational database.
 
     Relational databases can be very messy and crazy.
 
@@ -22,7 +20,7 @@ class Loader:
 
     That's because this class is supposed to be manipulated at every time you need to load a new relational database.
 
-    And as you can see, everything is so clear in you face.
+    And as you can see in the code, everything is so clear in you face.
 
     Read the code, make the changes (keep a backup) and run it.
 
@@ -75,13 +73,15 @@ class Loader:
 
         """
 
-        dataSource = self.getConfiguration( 'directories', 'inserts' )
+        # Database user name from the configuration file.
         username   = self.getConfiguration( 'database', 'user' )
 
+        # This command only list the tables from the database.
         command = 'psql -U ' + username + " -c '\dt'"
 
         result = subprocess.call( command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
+        # Zero means (from the subprocess package) the command could be executed without errors.
         if result == 0:
             return True
         else:
@@ -108,10 +108,10 @@ class Loader:
         for myFile in self.files:
             expectedTables.append( myFile['table'] )
 
-        # Just get data to be possible to logging into postgresql.
+        # Just get data to be possible to enter into postgresql.
         username   = self.getConfiguration( 'database', 'user' )
 
-        # Get all tables from the EXPECTED relational database you created.
+        # Get all tables from the EXPECTED relational database you've created.
         sqlTables = "SELECT table_name FROM information_schema.tables WHERE table_schema='public' AND table_type='BASE TABLE';"
 
         # Actual get the data said above executing the 'psql' command.
@@ -141,18 +141,20 @@ class Loader:
 
 
         # TODO: fix lack of expected tables.
-        # ------------------------------------------------------------------------------
+        # -------------------------------------------------------------------------------------------
         # Some table doesn't belong to the Loader but it exists...
+        # It means tables that have to be populated manually or tables you know are
+        # critical but you don't populate those using this Loader.
         # If you're doing smart things in your relational database, this thing have to 
         # be concerned.
-        expectedTables.append( 'source_databases' )
-        expectedTables.append( 'protein_pdbs' )
-        expectedTables.append( 'ec_reaction_classes' )
+        expectedTables.append( 'source_databases' )    # this goes manually.
+        expectedTables.append( 'protein_pdbs' )        # this is important and will be filled later.
+        expectedTables.append( 'ec_reaction_classes' ) # this goes manually.
         # END of not fancy workaround. But loaders... come on... you know... loaders... 
         # If you're a developer, you're horrified. If you're a database administrator
         # you're horrified. But if you are a guy that deals with loaders through big data
         # well... you know...
-        # ------------------------------------------------------------------------------
+        # -------------------------------------------------------------------------------------------
 
         # Remove possible duplications (we never know).
         expectedTables = set(expectedTables)
