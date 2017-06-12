@@ -443,17 +443,26 @@ class Importer:
 
                 entry = self.reader.getPepParsedEntry( position )
 
-                organismId = self.importerOrganism.organismsInserted[ entry.organism.code ]
+                # Sometimes there's 'pep' files without related organism. It happens in KEGG database.
+                # We skip completely sequences without related organism.
+                if not entry.organism.code in self.importerOrganism.organismsInserted:
+                    self.logger.info( 'writeProteins: ORGANISM NOT FOUND: ' + entry.organism.code )
 
-                self.logger.info( 'writeProteins: writing entry : ' + str(entry.identification) + '.' )
+                    # Skip the 'pep' file completely.
+                    break
 
-                #self.writeProteinsFile( proteinsDestination, entry.identification, entry.fullFastaHeader, entry.description, organismId, entry.sequence  )
-                proteinInserted = self.writeFile( proteinsDestination, 'proteins', [ str(entry.identification), str(entry.fullFastaHeader), str(entry.description), str(organismId), str(entry.sequence) ] )
-                self.proteinsInserted[ entry.identification ] = proteinInserted
+                else:
+                    organismId = self.importerOrganism.organismsInserted[ entry.organism.code ]
 
-                accessionInserted = self.writeFile( accessionsDestination, 'accessions', [ str(entry.identification) ]  )
-                self.accessionsInserted[ entry.identification ] = accessionInserted 
-                #self.writeAccessionsFile( accessionsDestination, entry.identification  )
+                    self.logger.info( 'writeProteins: writing entry : ' + str(entry.identification) + '.' )
+
+                    #self.writeProteinsFile( proteinsDestination, entry.identification, entry.fullFastaHeader, entry.description, organismId, entry.sequence  )
+                    proteinInserted = self.writeFile( proteinsDestination, 'proteins', [ str(entry.identification), str(entry.fullFastaHeader), str(entry.description), str(organismId), str(entry.sequence) ] )
+                    self.proteinsInserted[ entry.identification ] = proteinInserted
+
+                    accessionInserted = self.writeFile( accessionsDestination, 'accessions', [ str(entry.identification) ]  )
+                    self.accessionsInserted[ entry.identification ] = accessionInserted 
+                    #self.writeAccessionsFile( accessionsDestination, entry.identification  )
 
 
         self.logger.info( 'writeProteins: DONE' )
