@@ -20,6 +20,12 @@ class ImporterPathway:
         self.pathwayNamesInserted  = {}
         self.pathwayMapsInserted   = {}
 
+        self.reader = KeggReader()
+        self.config = Config()
+        self.afs    = AnendbFileSystem()
+
+        self.config.loadConfiguration()
+        self.conf = self.config.getConfigurations()
 
     def startImporter( self ):
 

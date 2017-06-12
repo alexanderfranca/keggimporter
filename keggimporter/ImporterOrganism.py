@@ -10,6 +10,12 @@ class ImporterOrganism:
         self.organismPrimaryKey = 0
         self.organismsInserted  = {}
 
+        self.reader = KeggReader()
+        self.config = Config()
+        self.afs    = AnendbFileSystem()
+
+        self.config.loadConfiguration()
+        self.conf = self.config.getConfigurations()
 
     def startImporter( self ):
 
