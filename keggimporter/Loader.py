@@ -7,6 +7,7 @@ from ImporterOrganism import *
 import sys
 import subprocess
 import re
+import glob
 
 class Loader:
     """
