@@ -1,0 +1,15 @@
+#!/bin/bash
+
+IFS='
+'
+
+# get keggreader configurations
+. get-config
+
+
+echo ${genome_file}
+tot_organisms=`cat ${genome_file} | grep ENTRY | grep Complete | wc -l` 
+
+
+echo "Total of organisms: ${tot_organisms}" >> resume
+

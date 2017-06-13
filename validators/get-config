@@ -1,0 +1,65 @@
+#!/bin/bash
+
+IFS='
+'
+
+home="$HOME"
+conf="${home}/.keggreader.conf"
+conf_importer="${home}/.keggimporter.conf"
+
+pep_dir=''
+lists_dir=''
+
+
+genome_file=`cat ${conf} | grep genome | grep = | cut -f 2 -d '=' | sed s/\ //g`
+enzyme_file=`cat ${conf} | grep enzyme | grep = | cut -f 2 -d '=' | sed s/\ //g`
+pathway_file=`cat ${conf} | grep pathway | grep pathway\.list | cut -f 2 -d '=' | sed s/\ //g`
+ec_file=`cat ${conf} | grep ec | grep ec\.list | cut -f 2 -d '=' | sed s/\ //g`
+gene_maps_dir=`cat ${conf} | grep gene_maps | cut -f 2 -d '=' | sed s/\ //g`
+log_file=`cat ${conf_importer} | grep log | grep = | cut -f 2 -d '=' | sed s/\ //g`
+
+
+let can_search_list_files=0
+for c in `cat ${conf}`
+do
+
+    found_pep=`echo ${c} | grep 'pep =' | wc -c`
+
+    if [ ${found_pep} -gt 0 ]
+    then
+        peps=`echo ${c} | grep 'pep ='`
+        peps=`echo ${peps} | cut -f 2 -d '='`
+        peps=`echo ${peps} | sed s/\ //g`
+        pep_dir=${peps}
+    fi
+
+    find_directories_section=`echo ${c} | grep '\[directories\]' | wc -c`
+
+    if [ ${find_directories_section} -gt 1 ]
+    then
+        let can_search_list_files=1
+    fi
+
+    if [ ${can_search_list_files} -gt 0 ]
+    then
+
+        found_lists=`echo ${c} | grep 'pathway =' | wc -c`
+
+        if [ ${found_lists} -gt 0 ]
+        then
+            lists=`echo ${c} | grep 'pathway ='`
+            lists=`echo ${lists} | cut -f 2 -d '='`
+            lists=`echo ${lists} | sed s/\ //g`
+            lists_dir=${lists}
+        fi
+    fi
+
+
+
+done
+
+
+
+
+
+

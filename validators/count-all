@@ -1,0 +1,9 @@
+#!/bin/bash
+
+rm resume 2> /dev/null
+
+. get-config
+. setup-validator
+. count-proteins
+. count-ec-numbers
+. count-organisms

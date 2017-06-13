@@ -1,0 +1,16 @@
+#!/bin/bash
+
+IFS='
+'
+
+rm resume 2> /dev/null
+
+# get keggreader configurations
+. get-config
+. setup-validator
+
+
+tot_proteins=`cat ${pep_dir}/*.pep | grep '^>' | wc -l`
+
+echo "Total of proteins: ${tot_proteins}" >> resume
+

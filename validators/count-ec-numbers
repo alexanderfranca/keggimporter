@@ -1,0 +1,47 @@
+#!/bin/bash
+
+IFS='
+'
+
+# get keggreader configurations
+. get-config
+
+
+rm all-ecs-temp 2> /dev/null
+rm lists-uniq 2> /dev/null
+rm enzymes-uniq 2> /dev/null
+rm all-ecs-uniq 2> /dev/null
+rm eclist-uniq 2> /dev/null
+rm temp 2> /dev/null
+
+echo ${enzyme_file}
+tot_ec_numbers_from_enzyme=`cat ${enzyme_file} | grep ENTRY  | grep -v Obsolete | cut -f 9 -d ' ' | sed s/\ //g | wc -l` 
+cat ${enzyme_file} | grep ENTRY  | grep -v Obsolete | cut -f 9 -d ' ' | sed s/\ //g | sort | uniq > enzymes-uniq 
+
+echo ${ec_file}
+tot_ec_numbers_from_ec_list_file=`cat ${ec_file} | grep ec: | cut -f 2 | sed s/ec://g | sed s/\ //g | wc -l` 
+cat ${ec_file} | grep ec: | cut -f 2 | sed s/ec://g | sed s/\ //g | sort| uniq > eclist-uniq 
+
+
+echo ${lists_dir}
+cat ${lists_dir}/*.list| grep ec: | cut -f 3- -d ' ' > temp
+cat temp | sed 's/\ /\n/g'| sed 's/ds:.*//g' | sed 's/ko:.*//g' | sed 's/dr:.*//g' | sed '/^$/d' | sed 's/ec://g' | sort | uniq > lists-uniq
+
+tot_ec_numbers_from_lists=`cat lists-uniq | wc -l`
+
+cat enzymes-uniq >> all-ecs-temp
+cat lists-uniq >> all-ecs-temp
+cat eclist-uniq >> all-ecs-temp
+cat all-ecs-temp | sort | uniq > all-ecs-uniq
+
+tot_ec_numbers=`cat all-ecs-uniq | sort | uniq | wc -l`
+
+echo "Total of ec numbers: ${tot_ec_numbers}" >> resume
+
+rm all-ecs-temp 2> /dev/null
+rm lists-uniq 2> /dev/null
+rm enzymes-uniq 2> /dev/null
+rm all-ecs-uniq 2> /dev/null
+rm eclist-uniq 2> /dev/null
+rm temp 2> /dev/null
+

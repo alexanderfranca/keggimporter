@@ -1,0 +1,32 @@
+#!/bin/bash
+
+IFS='
+'
+
+# get configurations
+. get-config.sh
+
+
+# Things that is not supposed to be counted in anyway, like pep file without related organism (sittuation that is actual wrong from KEGG).
+mkdir /var/removeit 2>/dev/null
+
+not_found_organisms_lines=`grep ORGANISM\ NOT\ FOUND ${log_file}`
+
+for line in ${not_found_organisms_lines}
+do
+    #2017-06-12 20:56:27,838 - root - INFO - writeProteins: ORGANISM NOT FOUND: ngt
+
+    organism_not_found=`echo ${line} | cut -f 5 -d ':' | sed s/\ //g` 
+
+    for arq in `ls ${pep_dir}`
+    do
+        found_pep=`cat ${pep_dir}/${arq} | grep "^>${organism_not_found}" | wc -c`
+
+        if [ ${found_pep} -gt 0 ]
+        then
+            echo "File ${arq} was removed from counting because it's garbage."
+            mv ${pep_dir}/${arq} /var/removeit 2> /dev/null
+        fi
+    done
+
+done
