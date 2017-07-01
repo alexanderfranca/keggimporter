@@ -151,6 +151,8 @@ class Loader:
         expectedTables.append( 'source_databases' )    # this goes manually.
         expectedTables.append( 'protein_pdbs' )        # this is important and will be filled later.
         expectedTables.append( 'ec_reaction_classes' ) # this goes manually.
+        expectedTables.append( 'clusters' )            # this goes by outside process.
+        expectedTables.append( 'clustering_methods' )  # this goes by outside process.
         # END of not fancy workaround. But loaders... come on... you know... loaders... 
         # If you're a developer, you're horrified. If you're a database administrator
         # you're horrified. But if you are a guy that deals with loaders through big data
