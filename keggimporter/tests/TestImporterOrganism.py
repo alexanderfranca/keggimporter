@@ -3,64 +3,40 @@ import os
 sys.path.insert(0,  os.getcwd() + '/../')
 import unittest
 from ImporterOrganism import *
+from keggreader import *
 import re
 
 
 class TestImporterOrganism( unittest.TestCase ):
 
     def setUp( self ):
-        self.imp = ImporterOrganism()
 
-    def test_startImporter( self ):
+        reader = KeggReader()
 
-        self.imp.startImporter()
+        self.imp = ImporterOrganism(
+                                    destination_file='./fixtures/inserts/organismsInsert.psql',
+                                    keggreader=reader,
+                                    )
 
-
-    def test_getConfiguration( self ):
-
-        self.imp.startImporter() 
-        confFile = './fixtures/keggimporter.conf'
-        self.imp.setConfigurationFile( confFile )
-        
-        config = self.imp.getConfiguration( 'directories', 'inserts' )
-        expectedConfig = './fixtures/inserts'
-
-        self.assertEquals( config, expectedConfig )
-
-
-    def test_openOrganismFile( self ):
-
-        self.imp.startImporter() 
-        confFile = './fixtures/keggimporter.conf'
-        self.imp.setConfigurationFile( confFile )
-
-        result = self.imp.openOrganismsFile() 
-
-        self.assertTrue( type( result ) is file )
-
-    def test_nextOrganismPrimaryKey( self ):
+    def test_next_organism_primary_key( self ):
 
         expected = 3
 
         # 1
-        self.imp.nextOrganismPrimaryKey()
+        self.imp.next_organism_primary_key()
 
         # 2
-        self.imp.nextOrganismPrimaryKey()
+        self.imp.next_organism_primary_key()
 
         # 3
-        result = self.imp.nextOrganismPrimaryKey()
+        result = self.imp.next_organism_primary_key()
 
         self.assertEquals( result, expected ) 
 
 
-    def test_writeOrganisms( self ):
+    def test_write_organisms( self ):
 
-        self.imp.startImporter() 
-        confFile = './fixtures/keggimporter.conf'
-        self.imp.setConfigurationFile( confFile )
-
-        self.imp.writeOrganisms()
+        self.imp.write_organisms()
 
 
 if __name__ == "__main__":

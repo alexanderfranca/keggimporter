@@ -1,143 +1,56 @@
-import pprint
-from keggreader import *
-from Config import *
-import sys
-
+import os
 
 # TODO: Remove code duplication. All the 'open', 'next' and 'write file' methods can be replaced by a single one.
 #       Take a look in the Importer.py class to see how it can be done.
+
+
 class ImporterPathway:
 
-    def __init__( self ):
+    def __init__(
+            self,
+            pathway_super_class_file=None,
+            pathway_class_file=None,
+            pathway_file=None,
+            keggreader=None):
 
-        self.pathwaySuperClassPrimaryKey = 0
-        self.pathwaySuperClassesInserted  = {}
+        self.pathway_super_class_file = pathway_super_class_file
+        self.pathway_class_file = pathway_class_file
+        self.pathway_file = pathway_file
 
-        self.pathwayClassPrimaryKey = 0
-        self.pathwayClassesInserted  = {}
+        self.reader = keggreader
 
-        self.pathwayNamePrimaryKey = 0
-        self.pathwayNamesInserted  = {}
-        self.pathwayMapsInserted   = {}
+        self.pathway_super_class_primary_key = 0
+        self.pathway_super_classes_inserted = {}
 
-        self.reader = KeggReader()
-        self.config = Config()
-        self.afs    = AnendbFileSystem()
+        self.pathway_class_primary_key = 0
+        self.pathway_classes_inserted = {}
 
-        self.config.loadConfiguration()
-        self.conf = self.config.getConfigurations()
+        self.pathway_name_primary_key = 0
+        self.pathway_names_inserted = {}
+        self.pathway_maps_inserted = {}
 
-    def startImporter( self ):
+        self.purge_old_files(
+            pathway_super_class_file,
+            pathway_class_file,
+            pathway_file)
 
-        self.reader = KeggReader()
-        self.config = Config()
-        self.afs    = AnendbFileSystem()
+    # TODO: test, comment
+    def purge_old_files(
+            self,
+            pathway_super_class=None,
+            pathway_class=None,
+            pathway=None):
 
-        self.config.loadConfiguration()
-        self.conf = self.config.getConfigurations()
+        if os.path.exists(pathway_super_class):
+            os.remove(pathway_super_class)
 
+        if os.path.exists(pathway_class):
+            os.remove(pathway_class)
 
-    def getConfiguration( self, section=None, option=None ):
-        """
-        Load the configurations from configuration file.
+        if os.path.exists(pathway):
+            os.remove(pathway)
 
-        Returns configurations found in the keggimporter.conf file.
-
-        Args:
-            section(str): Section form keggimporter.conf file.
-            option(str): What option to read from keggimporter.conf file.
-
-        Returns:
-            (str): Configuration value from the keggimporter.conf file, in the spe
-        """
-
-        return self.conf.get( section, option )
-
-
-    def setConfigurationFile( self, conf_file=None ):
-        """
-        Set the current keggimporter.conf file.
-
-        Args:
-            conf_file(str): Full path for the keggimporter.conf
-        
-        """
-
-        self.config.configurationFile = conf_file
-        self.config.loadConfiguration()
-        self.conf = self.config.getConfigurations()
-
-
-    def openPathwaySuperClassesFile( self ):
-        """
-        Opens the file where to store database inserts instructions.
-
-        Returns:
-            (file): File handle to be written.
-
-        """
-
-        destinationDirectory = self.getConfiguration( 'directories', 'inserts' ) 
-
-        fileName = 'pathwaySuperClassesInsert.psql'
-
-        filePath = destinationDirectory + '/' + fileName
-
-        if self.afs.fileExists( filePath ):
-            fileHandle = self.afs.purgeAndCreateFile( filePath )
-        else:
-            fileHandle = self.afs.openFileForAppend( filePath )
-
-        return fileHandle
-
-
-    def openPathwayClassesFile( self ):
-        """
-        Opens the file where to store database inserts instructions.
-
-        Returns:
-            (file): File handle to be written.
-
-        """
-
-        destinationDirectory = self.getConfiguration( 'directories', 'inserts' ) 
-
-        fileName = 'pathwayClassesInsert.psql'
-
-        filePath = destinationDirectory + '/' + fileName
-
-        if self.afs.fileExists( filePath ):
-            fileHandle = self.afs.purgeAndCreateFile( filePath )
-        else:
-            fileHandle = self.afs.openFileForAppend( filePath )
-
-        return fileHandle
-
-
-    def openPathwayNamesFile( self ):
-        """
-        Opens the file where to store database inserts instructions.
-
-        Returns:
-            (file): File handle to be written.
-
-        """
-
-        destinationDirectory = self.getConfiguration( 'directories', 'inserts' ) 
-
-        fileName = 'pathwayNamesInsert.psql'
-
-        filePath = destinationDirectory + '/' + fileName
-
-        if self.afs.fileExists( filePath ):
-            fileHandle = self.afs.purgeAndCreateFile( filePath )
-        else:
-            fileHandle = self.afs.openFileForAppend( filePath )
-
-        return fileHandle
-
-
-    def nextPathwaySuperClassPrimaryKey( self ):
+    def next_pathway_super_class_primary_key(self):
         """
         Controls the pathways table primary key counter.
 
@@ -146,12 +59,11 @@ class ImporterPathway:
 
         """
 
-        self.pathwaySuperClassPrimaryKey += 1
+        self.pathway_super_class_primary_key += 1
 
-        return self.pathwaySuperClassPrimaryKey
+        return self.pathway_super_class_primary_key
 
-
-    def nextPathwayClassPrimaryKey( self ):
+    def next_pathway_class_primary_key(self):
         """
         Controls the pathways table primary key counter.
 
@@ -160,12 +72,11 @@ class ImporterPathway:
 
         """
 
-        self.pathwayClassPrimaryKey += 1
+        self.pathway_class_primary_key += 1
 
-        return self.pathwayClassPrimaryKey
+        return self.pathway_class_primary_key
 
-
-    def nextPathwayNamePrimaryKey( self ):
+    def next_pathway_name_primary_key(self):
         """
         Controls the pathways table primary key counter.
 
@@ -174,74 +85,102 @@ class ImporterPathway:
 
         """
 
-        self.pathwayNamePrimaryKey += 1
+        self.pathway_name_primary_key += 1
 
-        return self.pathwayNamePrimaryKey
+        return self.pathway_name_primary_key
 
-
-    def writePathwaySuperClassesFile( self, pathway_super_classes_file=None, pathway_super_class=None ):
+    def write_pathway_super_classes_file(
+            self,
+            pathway_super_classes_file=None,
+            pathway_super_class=None):
         """
         Actual write the pathways inserts file, log the operation and keep the inserted ids.
         """
 
-        nextId = self.nextPathwaySuperClassPrimaryKey()
+        next_id = self.next_pathway_super_class_primary_key()
 
-        pathway_super_classes_file.write( str(nextId) + '\t' + str(pathway_super_class) + "\n" )
+        pathway_super_classes_file.write(
+            str(next_id) + '\t' + str(pathway_super_class) + "\n")
 
-        self.pathwaySuperClassesInserted[ str( pathway_super_class ) ] = nextId 
+        self.pathway_super_classes_inserted[str(pathway_super_class)] = next_id
 
-
-    def writePathwayClassesFile( self, pathway_classes_file=None, pathway_super_class_id=None, pathway_class=None ):
+    def write_pathway_classes_file(
+            self,
+            pathway_classes_file=None,
+            pathway_super_class_id=None,
+            pathway_class=None):
         """
         Actual write the pathways inserts file, log the operation and keep the inserted ids.
         """
 
-        nextId = self.nextPathwayClassPrimaryKey()
+        next_id = self.next_pathway_class_primary_key()
 
-        pathway_classes_file.write( str(nextId) + '\t' + str( pathway_super_class_id ) + '\t' + str(pathway_class) + "\n" )
+        pathway_classes_file.write(
+            str(next_id) +
+            '\t' +
+            str(pathway_super_class_id) +
+            '\t' +
+            str(pathway_class) +
+            "\n")
 
-        self.pathwayClassesInserted[ str( pathway_class ) ] = nextId 
+        self.pathway_classes_inserted[str(pathway_class)] = next_id
 
-
-    def writePathwayNamesFile( self, pathway_names_file=None, pathway_class_id=None, pathway_map=None, pathway_name=None ):
+    def write_pathway_names_file(
+            self,
+            pathway_names_file=None,
+            pathway_class_id=None,
+            pathway_map=None,
+            pathway_name=None):
         """
         Actual write the pathways inserts file, log the operation and keep the inserted ids.
         """
 
-        nextId = self.nextPathwayNamePrimaryKey()
+        next_id = self.next_pathway_name_primary_key()
 
-        pathway_names_file.write( str(nextId) + '\t' + str( pathway_class_id ) + '\t' + str(pathway_map) + '\t' + str(pathway_name) + "\n" )
+        pathway_names_file.write(
+            str(next_id) +
+            '\t' +
+            str(pathway_class_id) +
+            '\t' +
+            str(pathway_map) +
+            '\t' +
+            str(pathway_name) +
+            "\n")
 
-        self.pathwayNamesInserted[ str( pathway_name ) ] = nextId 
-        self.pathwayMapsInserted[ str( pathway_map ) ] = nextId
+        self.pathway_names_inserted[str(pathway_name)] = next_id
+        self.pathway_maps_inserted[str(pathway_map)] = next_id
 
-
-    def writePathways( self ):
+    def write_pathways(self):
         """
         Write the pathways insert file.
         """
 
-        pathwaysDestination      = self.openPathwaySuperClassesFile()
-        pathwaysClassDestination = self.openPathwayClassesFile()
-        pathwaysNamesDestination = self.openPathwayNamesFile()
+        pathways_destination = open(self.pathway_super_class_file, 'a')
+        pathways_class_destination = open(self.pathway_class_file, 'a')
+        pathways_names_destination = open(self.pathway_file, 'a')
 
-        pathways = self.reader.getAllPathways() 
-        
+        pathways = self.reader.getAllPathways()
+
         # Pathway super class
-        for pathwaySuperClass, pathwayData in pathways.iteritems():
-            self.writePathwaySuperClassesFile( pathwaysDestination, pathwaySuperClass )
+        for pathway_super_class, pathway_data in pathways.iteritems():
+            self.write_pathway_super_classes_file(
+                pathways_destination, pathway_super_class)
 
             # Pathway class
-            for pathwayClass,data in pathwayData.iteritems():
-                self.writePathwayClassesFile( pathwaysClassDestination, self.pathwaySuperClassesInserted[ pathwaySuperClass ], pathwayClass )
+            for pathway_class, data in pathway_data.iteritems():
+                self.write_pathway_classes_file(
+                    pathways_class_destination,
+                    self.pathway_super_classes_inserted[pathway_super_class],
+                    pathway_class)
 
                 # Pathway map and name
-                for pathwayMap,pathwayName in data.iteritems():
-                    self.writePathwayNamesFile( pathwaysNamesDestination, self.pathwayClassesInserted[ pathwayClass ], pathwayMap, pathwayName )
+                for pathway_map, pathway_name in data.iteritems():
+                    self.write_pathway_names_file(
+                        pathways_names_destination,
+                        self.pathway_classes_inserted[pathway_class],
+                        pathway_map,
+                        pathway_name)
 
-
-
-
-
-
-
+        pathways_destination.close()
+        pathways_class_destination.close()
+        pathways_names_destination.close()

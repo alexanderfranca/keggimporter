@@ -1,87 +1,26 @@
-import pprint
-from keggreader import *
-from Config import *
-import sys
+import os
+
 
 class ImporterOrganism:
 
-    def __init__( self ):
+    def __init__(self, destination_file=None, keggreader=None):
 
-        self.organismPrimaryKey = 0
-        self.organismsInserted  = {}
+        self.destination_file = destination_file
 
-        self.reader = KeggReader()
-        self.config = Config()
-        self.afs    = AnendbFileSystem()
+        self.organism_primary_key = 0
+        self.organisms_inserted = {}
 
-        self.config.loadConfiguration()
-        self.conf = self.config.getConfigurations()
+        self.reader = keggreader
 
-    def startImporter( self ):
+        self.purge_old_file(self.destination_file)
 
-        self.reader = KeggReader()
-        self.config = Config()
-        self.afs    = AnendbFileSystem()
+    # TODO: test, comment
+    def purge_old_file(self, destination_file=None):
 
-        self.config.loadConfiguration()
-        self.conf = self.config.getConfigurations()
+        if os.path.exists(destination_file):
+            os.remove(destination_file)
 
-
-    def getConfiguration( self, section=None, option=None ):
-        """
-        Load the configurations from configuration file.
-
-        Returns configurations found in the keggimporter.conf file.
-
-        Args:
-            section(str): Section form keggimporter.conf file.
-            option(str): What option to read from keggimporter.conf file.
-
-        Returns:
-            (str): Configuration value from the keggimporter.conf file, in the spe
-        """
-
-        return self.conf.get( section, option )
-
-
-    def setConfigurationFile( self, conf_file=None ):
-        """
-        Set the current keggimporter.conf file.
-
-        Args:
-            conf_file(str): Full path for the keggimporter.conf
-        
-        """
-
-        self.config.configurationFile = conf_file
-        self.config.loadConfiguration()
-        self.conf = self.config.getConfigurations()
-
-
-    def openOrganismsFile( self ):
-        """
-        Opens the file where to store database inserts instructions.
-
-        Returns:
-            (file): File handle to be written.
-
-        """
-
-        destinationDirectory = self.getConfiguration( 'directories', 'inserts' ) 
-
-        fileName = 'organismsInsert.psql'
-
-        filePath = destinationDirectory + '/' + fileName
-
-        if self.afs.fileExists( filePath ):
-            fileHandle = self.afs.purgeAndCreateFile( filePath )
-        else:
-            fileHandle = self.afs.openFileForAppend( filePath )
-
-        return fileHandle
-
-
-    def nextOrganismPrimaryKey( self ):
+    def next_organism_primary_key(self):
         """
         Controls the organisms table primary key counter.
 
@@ -90,36 +29,50 @@ class ImporterOrganism:
 
         """
 
-        self.organismPrimaryKey += 1
+        self.organism_primary_key += 1
 
-        return self.organismPrimaryKey
+        return self.organism_primary_key
 
-
-    def writeOrganismsFile( self, organism_file=None, organism_code=None, organism_kegg_name=None, organism_internal_kegg_id=None, taxonomy_id=None ):
+    def write_organisms_file(
+            self,
+            organism_file=None,
+            organism_code=None,
+            organism_kegg_name=None,
+            organism_internal_kegg_id=None,
+            taxonomy_id=None):
         """
         Actual write the organisms inserts file, log the operation and keep the inserted ids.
         """
 
-        nextId = self.nextOrganismPrimaryKey()
+        next_id = self.next_organism_primary_key()
 
-        organism_file.write( str(nextId) + '\t' + str(organism_code) + '\t' + str(organism_kegg_name) + '\t' + str(organism_internal_kegg_id) + '\t' + str( taxonomy_id ) + "\n" )
+        organism_file.write(
+            str(next_id) +
+            '\t' +
+            str(organism_code) +
+            '\t' +
+            str(organism_kegg_name) +
+            '\t' +
+            str(organism_internal_kegg_id) +
+            '\t' +
+            str(taxonomy_id) +
+            "\n")
 
-        self.organismsInserted[ str( organism_code ) ] = nextId 
+        self.organisms_inserted[str(organism_code)] = next_id
 
-
-    def writeOrganisms( self ):
+    def write_organisms(self):
         """
         Write the organisms insert file.
         """
 
-        organismsDestination = self.openOrganismsFile()
+        organisms = self.reader.getAllOrganisms()
 
-        organisms = self.reader.getAllOrganisms() 
-        
-        for organismCode,organismData in organisms.iteritems():
-            self.writeOrganismsFile( organismsDestination,  organismCode, organismData['genome']['kegg_definition_name'], organismData['genome']['kegg_organism_id'], organismData['genome']['taxonomy_id'] )
+        with open(self.destination_file, 'a') as f:
 
-
-
-
-
+            for organism_code, organism_data in organisms.iteritems():
+                self.write_organisms_file(
+                    f,
+                    organism_code,
+                    organism_data['genome']['kegg_definition_name'],
+                    organism_data['genome']['kegg_organism_id'],
+                    organism_data['genome']['taxonomy_id'])

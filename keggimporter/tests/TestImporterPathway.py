@@ -2,6 +2,7 @@ import sys
 import os
 sys.path.insert(0,  os.getcwd() + '/../')
 import unittest
+from keggreader import *
 from ImporterPathway import *
 import re
 
@@ -9,115 +10,65 @@ import re
 class TestImporterPathway( unittest.TestCase ):
 
     def setUp( self ):
-        self.imp = ImporterPathway()
 
-    def test_startImporter( self ):
+        reader = KeggReader()
 
-        self.imp.startImporter()
+        self.imp = ImporterPathway(
+                                    pathway_super_class_file='./fixtures/inserts/pathwaySuperClassesInsert.psql',
+                                    pathway_class_file='./fixtures/inserts/pathwayClassesInsert.psql',
+                                    pathway_file='./fixtures/inserts/pathwayNamesInsert.psql',
+                                    keggreader=reader, 
+                                    )
 
-
-    def test_getConfiguration( self ):
-
-        self.imp.startImporter() 
-        confFile = './fixtures/keggimporter.conf'
-        self.imp.setConfigurationFile( confFile )
-        
-        config = self.imp.getConfiguration( 'directories', 'inserts' )
-        expectedConfig = './fixtures/inserts'
-
-        self.assertEquals( config, expectedConfig )
-
-
-    def test_openPathwaySuperClassFile( self ):
-
-        self.imp.startImporter() 
-        confFile = './fixtures/keggimporter.conf'
-        self.imp.setConfigurationFile( confFile )
-
-        result = self.imp.openPathwaySuperClassesFile() 
-
-        self.assertTrue( type( result ) is file )
-
-
-    def test_nextPathwaySuperClassPrimaryKey( self ):
+    def test_next_pathway_super_class_primary_key( self ):
 
         expected = 3
 
         # 1
-        self.imp.nextPathwaySuperClassPrimaryKey()
+        self.imp.next_pathway_super_class_primary_key()
 
         # 2
-        self.imp.nextPathwaySuperClassPrimaryKey()
+        self.imp.next_pathway_super_class_primary_key()
 
         # 3
-        result = self.imp.nextPathwaySuperClassPrimaryKey()
+        result = self.imp.next_pathway_super_class_primary_key()
 
         self.assertEquals( result, expected ) 
 
 
-    def test_openPathwayClassFile( self ):
-
-        self.imp.startImporter() 
-        confFile = './fixtures/keggimporter.conf'
-        self.imp.setConfigurationFile( confFile )
-
-        result = self.imp.openPathwayClassesFile() 
-
-        self.assertTrue( type( result ) is file )
-
-
-
-    def test_nextPathwayClassPrimaryKey( self ):
+    def test_next_pathway_class_primary_key( self ):
 
         expected = 3
 
         # 1
-        self.imp.nextPathwayClassPrimaryKey()
+        self.imp.next_pathway_class_primary_key()
 
         # 2
-        self.imp.nextPathwayClassPrimaryKey()
+        self.imp.next_pathway_class_primary_key()
 
         # 3
-        result = self.imp.nextPathwayClassPrimaryKey()
+        result = self.imp.next_pathway_class_primary_key()
 
         self.assertEquals( result, expected ) 
 
-
-    def test_openPathwayNameFile( self ):
-
-        self.imp.startImporter() 
-        confFile = './fixtures/keggimporter.conf'
-        self.imp.setConfigurationFile( confFile )
-
-        result = self.imp.openPathwayNamesFile() 
-
-        self.assertTrue( type( result ) is file )
-
-
-    def test_nextPathwayNamePrimaryKey( self ):
+    def test_next_pathway_name_primary_key( self ):
 
         expected = 3
 
         # 1
-        self.imp.nextPathwayNamePrimaryKey()
+        self.imp.next_pathway_name_primary_key()
 
         # 2
-        self.imp.nextPathwayNamePrimaryKey()
+        self.imp.next_pathway_name_primary_key()
 
         # 3
-        result = self.imp.nextPathwayNamePrimaryKey()
+        result = self.imp.next_pathway_name_primary_key()
 
         self.assertEquals( result, expected ) 
 
+    def test_write_pathways( self ):
 
-
-    def test_writePathways( self ):
-
-        self.imp.startImporter() 
-        confFile = './fixtures/keggimporter.conf'
-        self.imp.setConfigurationFile( confFile )
-
-        self.imp.writePathways()
+        self.imp.write_pathways()
 
 
 if __name__ == "__main__":

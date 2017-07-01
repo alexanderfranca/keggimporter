@@ -3,64 +3,39 @@ import os
 sys.path.insert(0,  os.getcwd() + '/../')
 import unittest
 from ImporterEc import *
+from keggreader import *
 import re
 
 
 class TestImporterEc( unittest.TestCase ):
 
     def setUp( self ):
-        self.imp = ImporterEc()
+        reader = KeggReader()
 
-    def test_startImporter( self ):
+        self.imp = ImporterEc(
+                                destination_file='./fixtures/inserts/ecsInsert.psql',
+                                keggreader=reader,
+                            )
 
-        self.imp.startImporter()
-
-
-    def test_getConfiguration( self ):
-
-        self.imp.startImporter() 
-        confFile = './fixtures/keggimporter.conf'
-        self.imp.setConfigurationFile( confFile )
-        
-        config = self.imp.getConfiguration( 'directories', 'inserts' )
-        expectedConfig = './fixtures/inserts'
-
-        self.assertEquals( config, expectedConfig )
-
-
-    def test_openEcFile( self ):
-
-        self.imp.startImporter() 
-        confFile = './fixtures/keggimporter.conf'
-        self.imp.setConfigurationFile( confFile )
-
-        result = self.imp.openEcsFile() 
-
-        self.assertTrue( type( result ) is file )
-
-    def test_nextEcPrimaryKey( self ):
+    def test_next_ec_primary_key( self ):
 
         expected = 3
 
         # 1
-        self.imp.nextEcPrimaryKey()
+        self.imp.next_ec_primary_key()
 
         # 2
-        self.imp.nextEcPrimaryKey()
+        self.imp.next_ec_primary_key()
 
         # 3
-        result = self.imp.nextEcPrimaryKey()
+        result = self.imp.next_ec_primary_key()
 
         self.assertEquals( result, expected ) 
 
 
-    def test_writeEcs( self ):
+    def test_write_ecs( self ):
 
-        self.imp.startImporter() 
-        confFile = './fixtures/keggimporter.conf'
-        self.imp.setConfigurationFile( confFile )
-
-        self.imp.writeEcs()
+        self.imp.write_ecs()
 
 
 if __name__ == "__main__":
